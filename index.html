@@ -56,7 +56,37 @@ html,body{height:100%;background:var(--void);color:var(--chalk);font-family:var(
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.25;transform:scale(.55)}}
 
 .s-brand{margin-bottom:6px;}
-.s-speaks{font-family:var(--fs);font-size:1.15rem;font-style:italic;color:var(--c42);margin-bottom:44px;}
+.s-speaks{
+  font-family:var(--fs);
+  font-size:clamp(3rem,6.5vw,4.8rem);
+  font-style:italic;
+  font-weight:500;
+  letter-spacing:0.04em;
+  line-height:1;
+  /* gradient: terra → amatista */
+  background: linear-gradient(100deg, #C4622D 0%, #9333EA 55%, #7C3AED 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom:0;
+  position:relative;
+  display:inline-block;
+}
+/* thin rule beneath Speaks */
+.s-speaks::after{
+  content:'';
+  display:block;
+  height:1.5px;
+  margin-top:6px;
+  background:linear-gradient(90deg, #C4622D 0%, #9333EA 60%, transparent 100%);
+  border-radius:1px;
+}
+.s-speaks-wrap{
+  margin-bottom:44px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
 
 .s-headline{
   font-family:var(--fs);
@@ -221,7 +251,7 @@ html,body{height:100%;background:var(--void);color:var(--chalk);font-family:var(
   <div class="splash-glow"></div>
   <div class="s-eyebrow"><span class="s-pulse"></span>Ley 284 · Propiedad Horizontal · Panamá</div>
   <div class="s-brand"><div class="wm wm-lg"><span class="f">Forum</span><span class="ph">PH</span><span class="s">s</span></div></div>
-  <div class="s-speaks">Speaks</div>
+  <div class="s-speaks-wrap"><div class="s-speaks">Speaks</div></div>
   <h1 class="s-headline">¿Tiene preguntas sobre<br>la <em>Ley 284</em>?<br>Aquí están las respuestas.</h1>
   <p class="s-sub">Consulte sus derechos, obligaciones y dudas sobre Propiedad Horizontal en Panamá — en lenguaje claro, supervisado por una Abogada especialista.</p>
   <button class="s-cta" id="cta-btn" onclick="enterApp()">
