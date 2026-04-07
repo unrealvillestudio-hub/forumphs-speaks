@@ -45,11 +45,14 @@ html,body{height:100%;background:var(--void);color:var(--chalk);font-family:var(
 }
 
 .s-eyebrow{
-  font-family:var(--fd);font-size:8px;letter-spacing:.34em;text-transform:uppercase;
-  color:var(--ame);display:flex;align-items:center;gap:9px;margin-bottom:32px;
+  font-family:var(--fd);font-size:9px;letter-spacing:.28em;text-transform:uppercase;
+  color:#C4B5FD;display:flex;align-items:center;gap:9px;margin-bottom:32px;
   position:relative;
+  background:rgba(124,58,237,0.15);border:1px solid rgba(196,181,253,0.3);
+  padding:7px 16px;border-radius:2px;
 }
 .s-pulse{width:5px;height:5px;background:var(--ame);border-radius:50%;animation:pulse 2.4s ease-in-out infinite;}
+.s-eyebrow{background:rgba(124,58,237,0.16);border:1px solid rgba(196,181,253,0.32);padding:6px 16px;border-radius:20px;}
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.25;transform:scale(.55)}}
 
 .s-brand{margin-bottom:6px;}
@@ -72,7 +75,7 @@ html,body{height:100%;background:var(--void);color:var(--chalk);font-family:var(
 /* CTA pulsante */
 .s-cta{
   font-family:var(--fd);font-size:10.5px;letter-spacing:.22em;text-transform:uppercase;
-  color:var(--void);background:var(--ame);
+  color:#FFFFFF;background:var(--ame);font-weight:600;letter-spacing:.2em;
   border:none;padding:18px 52px;cursor:pointer;border-radius:2px;
   animation:ctaPulse 2.1s ease-in-out infinite;
   transition:background .2s,transform .15s;
