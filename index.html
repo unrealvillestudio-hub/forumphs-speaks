@@ -232,8 +232,7 @@ html,body{height:100%;background:var(--void);color:var(--chalk);font-family:var(
 /* RESPONSIVE */
 @media(max-width:700px){
   #app{grid-template-columns:1fr;}
-  .unrlvl-footer{position:fixed;bottom:0;left:0;right:0;z-index:49;padding:7px 14px;}
-  .side{display:none;}
+    .side{display:none;}
   /* Chat header fixed at top */
   .chat-header{
     position:fixed;top:0;left:0;right:0;z-index:50;
@@ -265,9 +264,8 @@ html,body{height:100%;background:var(--void);color:var(--chalk);font-family:var(
 }
 
 /* ── UNRLVL Logotype — BP_BRAND_UNRLVL_v1.0 ── */
-@keyframes chevron-blink {
-  0%, 49% { opacity: 1; }
-  50%, 100% { opacity: 0; }
+@keyframes chev-listen {
+  0%,45%{opacity:1;}50%,92%{opacity:0;}97%,100%{opacity:1;}
 }
 .lt-logotype {
   font-family: 'Bebas Neue', sans-serif;
@@ -278,7 +276,7 @@ html,body{height:100%;background:var(--void);color:var(--chalk);font-family:var(
 .lt-un, .lt-ille { color: #F2F0EC; }
 .lt-chevron {
   color: #00FFD1;
-  animation: chevron-blink 1s step-start infinite;
+  animation:chev-listen 0.9s ease-in-out infinite;
   display: inline-block;
   transform: scaleY(1.45) scaleX(0.72);
   transform-origin: center;
@@ -304,37 +302,118 @@ html,body{height:100%;background:var(--void);color:var(--chalk);font-family:var(
   padding: 3px 8px;
   border-radius: 3px;
 }
-/* UNRLVL Footer — inside .main flex column */
-.unrlvl-footer {
-  background: var(--carbon);
-  border-top: 1px solid var(--c06);
-  padding: 7px 28px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex-shrink: 0;
-  height: 34px;
+@media(max-width:700px){
+  .unrlvl-header,  }
+
+/* ── UNRLVL Standard Footer — BP_BRAND_UNRLVL_v1.2 — 3-column mandatory ── */
+@keyframes chev-sig {
+  0%,45%{opacity:1;}50%,92%{opacity:0;}97%,100%{opacity:1;}
 }
-.unrlvl-footer-credit {
+footer.unrlvl-footer {
+  background: #0F0F0F;
+  border-top: 2px solid #00FFD1;
+  padding: 14px 28px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  align-items: center;
+  gap: 1rem;
+  flex-shrink: 0;
+}
+/* Col 1 — Client logo */
+.fp-col-left {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
+}
+.fp-client-wm {
+  font-family: 'EB Garamond', serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #F2F0EC;
+  line-height: 1;
+}
+.fp-client-wm .wm-ph { font-family: 'DM Sans', sans-serif; font-weight: 700; color: #C4622D; }
+.fp-client-desc {
   font-family: 'Space Mono', monospace;
-  font-size: 9px;
-  color: var(--c42);
-  margin-left: auto;
+  font-size: 7px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(242,240,236,0.35);
+}
+/* Col 2 — Rights */
+.fp-col-center {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+.fp-rights {
+  font-family: 'Space Mono', monospace;
+  font-size: 8px;
+  color: rgba(242,240,236,0.35);
+  letter-spacing: 0.06em;
+}
+/* Col 3 — UNRLVL Signature */
+.fp-col-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+}
+.fp-sig-line {
+  display: flex;
+  align-items: baseline;
+  gap: 0;
+  line-height: 1;
+}
+.fp-sig-by {
+  font-family: 'Space Mono', monospace;
+  font-size: 6px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(242,240,236,0.28);
+  margin-right: 4px;
+}
+.fp-sig-name {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  color: rgba(242,240,236,0.62);
+}
+.fp-sig-chev {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 12px;
+  color: #00FFD1;
+  display: inline-block;
+  animation: chev-sig 0.9s ease-in-out infinite;
+}
+.fp-sig-studio {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 8px;
+  letter-spacing: 0.24em;
+  color: #1A1A1A;
+  margin-left: 4px;
+  vertical-align: baseline;
+}
+.fp-addr {
+  font-family: 'Space Mono', monospace;
+  font-size: 7px;
+  color: rgba(242,240,236,0.2);
   letter-spacing: 0.06em;
 }
 @media(max-width:700px){
-  .unrlvl-header,.unrlvl-footer {
-  background: var(--carbon);
-  border-top: 1px solid var(--c06);
-  padding: 7px 28px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex-shrink: 0;
-  height: 34px;
+  footer.unrlvl-footer {
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 49;
+    grid-template-columns: 1fr;
+    padding: 8px 14px;
+    gap: 2px;
+  }
+  .fp-col-left,.fp-col-center,.fp-col-right { align-items: center; text-align: center; }
+  .fp-col-center,.fp-addr { display: none; }
 }
-  .unrlvl-footer-credit { display: none; }
-}
+
 </style>
 </head>
 <body>
@@ -407,13 +486,26 @@ html,body{height:100%;background:var(--void);color:var(--chalk);font-family:var(
       </div><!-- /input-float -->
       <div class="input-note" id="input-note">Cargando...</div>
     </div>
-    <!-- UNRLVL Footer — BP_BRAND_UNRLVL_v1.0 · client output · footer only -->
+    <!-- UNRLVL Standard Footer — BP_BRAND_UNRLVL_v1.2 — 3-column -->
     <footer class="unrlvl-footer">
-      <span class="lt-logotype size-footer">
-        <span class="lt-un">UNREAL</span><span class="lt-chevron">></span><span class="lt-ille">ILLE</span><span class="lt-studio">STUDIO</span>
-      </span>
-      <span class="icr-badge">ICR</span>
-      <span class="unrlvl-footer-credit">ForumPHs · Speaks · 2026-04-07</span>
+      <!-- Col 1: Client logo + descriptor -->
+      <div class="fp-col-left">
+        <div class="fp-client-wm">Forum<span class="wm-ph">PH</span><span class="wm-ph">s</span></div>
+        <div class="fp-client-desc">Propiedad Horizontal · Panamá</div>
+      </div>
+      <!-- Col 2: Rights -->
+      <div class="fp-col-center">
+        <div class="fp-rights">© 2026 ForumPHs — ForumPHs Speaks</div>
+        <div class="fp-rights">Agente Legal · Uso Público</div>
+      </div>
+      <!-- Col 3: UNRLVL Signature -->
+      <div class="fp-col-right">
+        <div class="fp-sig-line">
+          <span class="fp-sig-by">Designed &amp; Developed by&nbsp;</span>
+          <span class="fp-sig-name">Unreal</span><span class="fp-sig-chev">&gt;</span><span class="fp-sig-name">ille</span><span class="fp-sig-studio">Studio</span>
+        </div>
+        <div class="fp-addr">unrealvillestudio.com &nbsp;·&nbsp; Hollywood, FL 33021</div>
+      </div>
     </footer>
   </main>
 </div>
