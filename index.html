@@ -804,8 +804,8 @@ footer.unrlvl-footer {
   }
 
   /* ajustar padding-bottom del chat para bottom bar */
-  .messages{padding-bottom:180px !important;}
-  .input-area{bottom:72px !important;}
+  .messages{padding-bottom:210px !important;}
+  .input-area{bottom:80px !important;}
 
   /* suggestion chips horizontales en mobile */
   .mob-chips{
@@ -825,9 +825,227 @@ footer.unrlvl-footer {
 
   /* ocultar suggested-block desktop en mobile */
   .suggested-block{display:none;}
+  /* ocultar mob-chips en mobile (usamos drawer ahora) */
+  .mob-chips{display:none !important;}
 
   /* chat header mobile — mostrar home btn */
   .home-btn{display:flex;}
+}
+
+/* ── CONTEXT SELECTOR ────────────────────────────────────────────────── */
+#ctx-selector{
+  position:fixed;inset:0;z-index:200;
+  background:#0E1018;
+  display:flex;flex-direction:column;align-items:center;
+  justify-content:center;padding:40px 24px;gap:0;
+  animation:fadein .3s ease;
+}
+.ctx-eyebrow{
+  display:flex;align-items:center;gap:8px;
+  font-family:'Cinzel',serif;font-size:9px;letter-spacing:.22em;
+  text-transform:uppercase;color:rgba(249,248,255,.3);margin-bottom:24px;
+}
+.ctx-dot{
+  width:6px;height:6px;border-radius:50%;
+  background:#C4622D;box-shadow:0 0 8px #C4622D;
+  animation:pulse-dot 2s ease-in-out infinite;
+}
+@keyframes pulse-dot{
+  0%,100%{opacity:1;} 50%{opacity:.4;}
+}
+.ctx-headline{
+  font-family:'EB Garamond',serif;font-size:clamp(28px,6vw,42px);
+  font-weight:400;color:#F0EDE8;text-align:center;line-height:1.2;
+  margin-bottom:40px;
+}
+.ctx-headline em{font-style:italic;color:#C4622D;}
+.ctx-cards{
+  display:flex;gap:16px;width:100%;max-width:640px;
+  flex-wrap:wrap;justify-content:center;margin-bottom:28px;
+}
+.ctx-card{
+  flex:1;min-width:240px;max-width:300px;
+  background:#1C2233;border:1px solid rgba(249,248,255,.07);
+  padding:28px 24px;cursor:pointer;position:relative;overflow:hidden;
+  transition:transform .2s,box-shadow .2s,border-color .2s;
+  display:flex;flex-direction:column;gap:8px;
+}
+.ctx-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:#C4622D;transform:scaleX(0);transform-origin:left;
+  transition:transform .3s ease;
+}
+.ctx-card:hover{
+  transform:translateY(-3px);
+  box-shadow:0 12px 40px rgba(196,98,45,.15);
+  border-color:rgba(196,98,45,.25);
+}
+.ctx-card:hover::before{transform:scaleX(1);}
+.ctx-card-prop{
+  border-color:rgba(196,98,45,.2);
+  background:linear-gradient(160deg,#1a1020,#1C2233);
+}
+.ctx-card-prop::before{background:linear-gradient(90deg,#C4622D,#e07840);}
+.ctx-card-prop:hover{
+  box-shadow:0 12px 40px rgba(196,98,45,.2);
+  border-color:rgba(196,98,45,.4);
+}
+.ctx-card-badge{
+  position:absolute;top:14px;right:14px;
+  font-family:'Cinzel',serif;font-size:7px;letter-spacing:.15em;
+  text-transform:uppercase;padding:3px 8px;
+  background:rgba(196,98,45,.15);border:1px solid rgba(196,98,45,.35);
+  color:#C4622D;
+}
+.ctx-card-icon{
+  width:48px;height:48px;border-radius:8px;
+  background:rgba(196,98,45,.1);border:1px solid rgba(196,98,45,.2);
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:8px;
+}
+.ctx-card-label{
+  font-family:'Cinzel',serif;font-size:9px;letter-spacing:.18em;
+  text-transform:uppercase;color:rgba(196,98,45,.8);
+}
+.ctx-card-name{
+  font-family:'EB Garamond',serif;font-size:22px;color:#F0EDE8;
+  line-height:1.1;
+}
+.ctx-card-desc{
+  font-family:'DM Sans',sans-serif;font-size:12px;
+  color:rgba(249,248,255,.35);line-height:1.6;flex:1;
+}
+.ctx-card-cta{
+  font-family:'Cinzel',serif;font-size:9px;letter-spacing:.12em;
+  text-transform:uppercase;color:#C4622D;margin-top:8px;
+  transition:gap .2s;display:flex;align-items:center;gap:8px;
+}
+.ctx-card-cta span{transition:transform .2s;}
+.ctx-card:hover .ctx-card-cta span{transform:translateX(4px);}
+.ctx-disclaimer{
+  font-family:'DM Sans',sans-serif;font-size:10px;
+  color:rgba(249,248,255,.2);text-align:center;max-width:400px;
+  line-height:1.6;
+}
+
+/* ── TABS COLAPSABLE ─────────────────────────────────────────────────── */
+.tabs-bar{transition:height .3s ease,opacity .3s ease;overflow:hidden;}
+.tabs-bar.collapsed{height:0 !important;opacity:0;pointer-events:none;}
+.tabs-handle{
+  display:flex;align-items:center;justify-content:center;
+  height:20px;background:#111828;
+  border-bottom:1px solid rgba(249,248,255,.06);
+  cursor:pointer;flex-shrink:0;
+  color:rgba(249,248,255,.25);transition:all .2s;
+}
+.tabs-handle:hover{background:rgba(249,248,255,.04);color:rgba(249,248,255,.6);}
+#tabs-arrow{transition:transform .3s ease;}
+#tabs-arrow.rotated{transform:rotate(180deg);}
+
+/* ── QUESTIONS DRAWER ────────────────────────────────────────────────── */
+.drawer-overlay{
+  position:fixed;inset:0;z-index:90;
+  background:rgba(0,0,0,.5);backdrop-filter:blur(2px);
+  opacity:0;pointer-events:none;transition:opacity .3s;
+}
+.drawer-overlay.show{opacity:1;pointer-events:all;}
+.drawer{
+  position:fixed;right:0;top:0;bottom:0;z-index:91;
+  width:min(320px,88vw);
+  background:linear-gradient(160deg,#111828,#0E1018);
+  border-left:1px solid rgba(249,248,255,.08);
+  display:flex;flex-direction:column;
+  transform:translateX(100%);transition:transform .35s cubic-bezier(.4,0,.2,1);
+  box-shadow:-8px 0 40px rgba(0,0,0,.4);
+}
+.drawer.open{transform:translateX(0);}
+.drawer-handle-bar{
+  display:none;align-items:center;justify-content:center;
+  padding:12px;cursor:pointer;flex-shrink:0;
+}
+.drawer-bar-pill{
+  width:36px;height:4px;border-radius:2px;
+  background:rgba(249,248,255,.15);
+}
+.drawer-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:20px 20px 12px;border-bottom:1px solid rgba(249,248,255,.06);
+  flex-shrink:0;
+}
+.drawer-title{
+  font-family:'Cinzel',serif;font-size:9px;letter-spacing:.2em;
+  text-transform:uppercase;color:rgba(249,248,255,.4);
+}
+.drawer-close{
+  background:none;border:none;color:rgba(249,248,255,.3);
+  cursor:pointer;padding:4px;transition:color .2s;
+  display:flex;align-items:center;
+}
+.drawer-close:hover{color:rgba(249,248,255,.8);}
+.drawer-items{
+  display:flex;flex-direction:column;gap:0;
+  overflow-y:auto;flex:1;padding:8px 0;
+}
+.drawer-item{
+  background:none;border:none;border-bottom:1px solid rgba(249,248,255,.05);
+  padding:14px 20px;text-align:left;cursor:pointer;
+  font-family:'DM Sans',sans-serif;font-size:12.5px;
+  color:rgba(249,248,255,.55);line-height:1.5;
+  transition:all .18s;position:relative;
+}
+.drawer-item::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;width:2px;
+  background:#C4622D;transform:scaleY(0);transform-origin:center;
+  transition:transform .18s;
+}
+.drawer-item:hover{
+  background:rgba(196,98,45,.06);color:#F0EDE8;padding-left:24px;
+}
+.drawer-item:hover::before{transform:scaleY(1);}
+.drawer-item:last-child{border-bottom:none;}
+
+/* Drawer trigger — borde derecho */
+.drawer-trigger{
+  position:fixed;right:0;top:50%;z-index:89;
+  transform:translateY(-50%);
+  background:#1C2233;
+  border:1px solid rgba(249,248,255,.1);border-right:none;
+  padding:14px 8px;cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  color:rgba(249,248,255,.35);transition:all .2s;
+  border-radius:6px 0 0 6px;
+}
+.drawer-trigger span{
+  font-family:'Cinzel',serif;font-size:7px;letter-spacing:.15em;
+  text-transform:uppercase;writing-mode:vertical-lr;
+  transform:rotate(180deg);color:rgba(249,248,255,.3);
+}
+.drawer-trigger:hover{
+  background:rgba(196,98,45,.12);border-color:rgba(196,98,45,.3);
+  color:#C4622D;
+}
+.drawer-trigger:hover span{color:#C4622D;}
+/* Ocultar trigger cuando drawer está abierto */
+.drawer-trigger.hidden{opacity:0;pointer-events:none;}
+
+/* ── MOBILE ADAPTACIONES ─────────────────────────────────────────────── */
+@media(max-width:700px){
+  .ctx-cards{flex-direction:column;align-items:center;gap:12px;}
+  .ctx-card{min-width:280px;max-width:100%;padding:22px 20px;}
+  .drawer-handle-bar{display:flex;}
+  /* En mobile el drawer sube desde abajo */
+  .drawer{
+    right:0;left:0;bottom:0;top:auto;width:100%;
+    max-height:70vh;border-left:none;
+    border-top:1px solid rgba(249,248,255,.1);
+    border-radius:16px 16px 0 0;
+    transform:translateY(100%);
+  }
+  .drawer.open{transform:translateY(0);}
+  .drawer-trigger{
+    top:auto;bottom:130px;right:0;transform:none;
+    border-radius:6px 0 0 6px;
+  }
 }
 </style>
 </head>
@@ -841,10 +1059,53 @@ footer.unrlvl-footer {
   <div class="s-speaks-wrap"><div class="s-speaks">Speaks</div></div>
   <h1 class="s-headline">¿Tiene preguntas sobre<br>la <em>Ley 284</em>?<br>Aquí están las respuestas.</h1>
   <p class="s-sub">Consulte sus derechos, obligaciones y dudas sobre Propiedad Horizontal en Panamá — en lenguaje claro, supervisado por una Abogada especialista.</p>
-  <button class="s-cta" id="cta-btn" onclick="enterApp()">
-    Consultar ahora <span class="s-arrow">→</span>
+  <button class="s-cta" id="cta-btn" onclick="openSelector()">
+    Comenzar <span class="s-arrow">→</span>
   </button>
   <div class="s-disclaimer">Información general sobre la Ley 284 de 2022. No sustituye asesoría jurídica profesional para su caso particular.</div>
+</div>
+
+
+<!-- ══ CONTEXT SELECTOR ════════════════════════════════════════════════ -->
+<div id="ctx-selector" style="display:none">
+  <div class="ctx-eyebrow">
+    <span class="ctx-dot"></span>ForumPHs Speaks
+  </div>
+  <div class="ctx-headline">¿Cómo podemos<br><em>ayudarle hoy?</em></div>
+
+  <div class="ctx-cards">
+    <!-- Card: Consulta -->
+    <div class="ctx-card" id="ctx-card-consulta" onclick="chooseContext('consulta')">
+      <div class="ctx-card-icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none"
+          stroke="#C4622D" stroke-width="1.5" stroke-linecap="round">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+        </svg>
+      </div>
+      <div class="ctx-card-label">Consulta Legal</div>
+      <div class="ctx-card-name">Ley 284</div>
+      <div class="ctx-card-desc">Entienda sus derechos y obligaciones como propietario. Gratuito, en lenguaje claro.</div>
+      <div class="ctx-card-cta">Consultar ahora <span>→</span></div>
+    </div>
+
+    <!-- Card: Propietarios -->
+    <div class="ctx-card ctx-card-prop" id="ctx-card-propietario" onclick="chooseContext('propietario')">
+      <div class="ctx-card-badge">Exclusivo</div>
+      <div class="ctx-card-icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none"
+          stroke="#C4622D" stroke-width="1.5" stroke-linecap="round">
+          <path d="M12 2L3 7v5c0 5 4 9 9 10 5-1 9-5 9-10V7L12 2z" fill="rgba(196,98,45,.15)"/>
+          <path d="M9 12l2 2 4-4" stroke="#e07840"/>
+        </svg>
+      </div>
+      <div class="ctx-card-label">Propietario</div>
+      <div class="ctx-card-name">ForumPHs</div>
+      <div class="ctx-card-desc">Acceso exclusivo para propietarios. Consultas ilimitadas con contexto de su PH.</div>
+      <div class="ctx-card-cta ctx-card-cta-prop">Acceder <span>→</span></div>
+    </div>
+  </div>
+
+  <div class="ctx-disclaimer">Supervisado por Ivette Flores · Abogada y Gerente General de ForumPHs</div>
 </div>
 
 <!-- ══ APP ════════════════════════════════════════════════════════════════ -->
@@ -893,7 +1154,7 @@ footer.unrlvl-footer {
   <main class="main">
 
     <!-- ══ TABS BAR ══════════════════════════════════════════════════════ -->
-    <div class="tabs-bar">
+    <div class="tabs-bar" id="tabs-bar">
       <!-- TAB: Consulta Ley 284 -->
       <button class="tab-btn active" id="tab-consulta" onclick="switchTab('consulta')">
         <div class="t-chip">
@@ -921,6 +1182,13 @@ footer.unrlvl-footer {
         </div>
         <span class="t-badge">Exclusivo</span>
       </button>
+    </div>
+    <!-- Tab collapse handle -->
+    <div class="tabs-handle" id="tabs-handle" onclick="toggleTabs()" title="Cambiar sección">
+      <svg id="tabs-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+        <polyline points="18 15 12 9 6 15"/>
+      </svg>
     </div>
 
     <!-- ══ TAB: CONSULTA (existente) ════════════════════════════════════ -->
@@ -974,6 +1242,39 @@ footer.unrlvl-footer {
       </div>
     </footer>
   
+    
+    <!-- ══ QUESTIONS DRAWER ═══════════════════════════════════════════ -->
+    <div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
+    <div class="drawer" id="questions-drawer">
+      <div class="drawer-handle-bar" onclick="closeDrawer()">
+        <div class="drawer-bar-pill"></div>
+      </div>
+      <div class="drawer-header">
+        <span class="drawer-title">Consultas frecuentes</span>
+        <button class="drawer-close" onclick="closeDrawer()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+      <div class="drawer-items">
+      <button class="drawer-item" onclick="useSuggestion(this);closeDrawer()">¿Pueden cortarme el agua si no pago las cuotas?</button>
+      <button class="drawer-item" onclick="useSuggestion(this);closeDrawer()">¿Cuántos votos se necesitan para aprobar una cuota extraordinaria?</button>
+      <button class="drawer-item" onclick="useSuggestion(this);closeDrawer()">¿Qué obligaciones tiene el administrador de mi edificio?</button>
+      <button class="drawer-item" onclick="useSuggestion(this);closeDrawer()">¿Qué es el fondo de imprevistos y es obligatorio?</button>
+      <button class="drawer-item" onclick="useSuggestion(this);closeDrawer()">¿Puedo asistir a la asamblea si estoy en mora?</button>
+      <button class="drawer-item" onclick="useSuggestion(this);closeDrawer()">¿Qué pasa si el administrador está malversando fondos?</button>
+      </div>
+    </div>
+    <!-- Drawer trigger tab (borde derecho) -->
+    <div class="drawer-trigger" id="drawer-trigger" onclick="openDrawer()">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="none"
+        stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+        <circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/>
+      </svg>
+      <span>FAQ</span>
+    </div>
     </div><!-- /tab-panel consulta -->
 
     <!-- ══ TAB: PROPIETARIOS ════════════════════════════════════════════ -->
@@ -1101,6 +1402,7 @@ async function enterApp(){
     startOnboarding();
   }, 580);
   showMobChips();
+  autoCollapseTabs();
 }
 
 //    DOTS                                                                   
@@ -1157,9 +1459,9 @@ function startOnboarding(){
     <div class="name-bubble">
       <div style="font-family:var(--fn);font-size:14px;color:var(--c72);line-height:1.78;">
         ${greeting}<br><br>
-        Soy un asistente especializado en la <strong style="color:var(--chalk)">Ley 284 de 2022</strong>, la ley que regula la Propiedad Horizontal en Panam . Estoy aqu  para ayudarle a entender sus derechos y obligaciones en lenguaje claro, sin tecnicismos.<br><br>
+        Soy un asistente especializado en la <strong style="color:var(--chalk)">Ley 284 de 2022</strong>, la ley que regula la Propiedad Horizontal en Panamá. Estoy aquí para ayudarle a entender sus derechos y obligaciones en lenguaje claro, sin tecnicismos.<br><br>
         No soy abogado, pero he sido entrenado con la ley completa y soy supervisado por <strong style="color:var(--chalk)">Ivette Flores</strong>, Abogada y Gerente General de ForumPHs.<br><br>
-        ${!userName?' C mo deber a llamarle?':' Cu l es su primera consulta?'}
+        ${!userName?'¿Cómo debería llamarle?':'¿Cuál es su primera consulta?'}
       </div>
       ${!userName?`<div class="name-input-row">
         <input class="name-input" type="text" id="name-input" placeholder="Su nombre..."
@@ -1690,6 +1992,79 @@ function showMobChips() {
     messages.parentNode.insertBefore(chips, messages);
     chips.style.display = 'flex';
   }
+}
+
+
+// ══ CONTEXT SELECTOR ═════════════════════════════════════════════════════
+function openSelector() {
+  // Ocultar splash
+  const splash = document.getElementById('splash');
+  if (splash) {
+    splash.style.transition = 'opacity .3s ease';
+    splash.style.opacity = '0';
+    setTimeout(() => { splash.style.display = 'none'; }, 300);
+  }
+  // Mostrar selector
+  const sel = document.getElementById('ctx-selector');
+  if (sel) {
+    sel.style.display = 'flex';
+    sel.style.opacity = '0';
+    requestAnimationFrame(() => {
+      sel.style.transition = 'opacity .35s ease';
+      sel.style.opacity = '1';
+    });
+  }
+}
+
+function chooseContext(tab) {
+  // Ocultar selector
+  const sel = document.getElementById('ctx-selector');
+  if (sel) {
+    sel.style.opacity = '0';
+    setTimeout(() => { sel.style.display = 'none'; }, 300);
+  }
+  // Activar tab elegido y entrar al app
+  switchTab(tab);
+  if (typeof mobSwitchTab === 'function') mobSwitchTab(tab);
+  enterApp();
+  // Si eligió propietarios, abrir mini auth si no está autenticado
+  if (tab === 'propietario' && !isUnlimited) {
+    setTimeout(() => openAuthMini(), 400);
+  }
+}
+
+// ══ TABS COLAPSABLE ═══════════════════════════════════════════════════════
+let tabsCollapsed = false;
+function toggleTabs() {
+  const bar = document.getElementById('tabs-bar');
+  const arrow = document.getElementById('tabs-arrow');
+  tabsCollapsed = !tabsCollapsed;
+  if (tabsCollapsed) {
+    bar.classList.add('collapsed');
+    arrow.classList.add('rotated');
+  } else {
+    bar.classList.remove('collapsed');
+    arrow.classList.remove('rotated');
+  }
+}
+
+// Auto-colapsar tabs 3s después de entrar al chat
+function autoCollapseTabs() {
+  setTimeout(() => {
+    if (!tabsCollapsed) toggleTabs();
+  }, 3000);
+}
+
+// ══ QUESTIONS DRAWER ══════════════════════════════════════════════════════
+function openDrawer() {
+  document.getElementById('questions-drawer').classList.add('open');
+  document.getElementById('drawer-overlay').classList.add('show');
+  document.getElementById('drawer-trigger').classList.add('hidden');
+}
+function closeDrawer() {
+  document.getElementById('questions-drawer').classList.remove('open');
+  document.getElementById('drawer-overlay').classList.remove('show');
+  document.getElementById('drawer-trigger').classList.remove('hidden');
 }
 
 </script>
