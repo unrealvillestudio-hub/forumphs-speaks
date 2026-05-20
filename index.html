@@ -1057,13 +1057,13 @@ footer.unrlvl-footer {
 }
 .mob-sw-handle{
   display:flex;align-items:center;justify-content:center;
-  height:28px;background:#111828;
-  border-top:1px solid rgba(249,248,255,.08);
-  cursor:pointer;color:rgba(249,248,255,.3);
+  height:36px;background:#111828;
+  border-top:2px solid rgba(196,98,45,.4);
+  cursor:pointer;color:#C4622D;
   transition:all .2s;
 }
-.mob-sw-handle:hover{background:rgba(249,248,255,.04);color:rgba(249,248,255,.6);}
-#mob-sw-arrow{transition:transform .3s ease;}
+.mob-sw-handle:hover{background:rgba(196,98,45,.08);color:#e07840;}
+#mob-sw-arrow{transition:transform .3s ease;filter:drop-shadow(0 0 4px rgba(196,98,45,.5));}
 #mob-sw-arrow.rotated{transform:rotate(180deg);}
 .mob-sw-panel{
   max-height:0;overflow:hidden;
@@ -2221,7 +2221,7 @@ function switchMobContext(tab) {
 <!-- ══ MOBILE CONTEXT SWITCHER (reemplaza tab bar) ══════════════════════ -->
 <div class="mob-switcher" id="mob-switcher" style="display:none">
   <div class="mob-sw-handle" id="mob-sw-handle" onclick="toggleMobSwitcher()">
-    <svg id="mob-sw-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none"
+    <svg id="mob-sw-arrow" width="22" height="22" viewBox="0 0 24 24" fill="none"
       stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
       <polyline points="18 15 12 9 6 15"/>
     </svg>
