@@ -233,7 +233,11 @@ html,body{height:100%;background:var(--void);color:var(--chalk);font-family:var(
 @media(max-width:700px){
   #app{grid-template-columns:1fr;display:flex;flex-direction:column;height:100dvh;overflow:hidden;}
   .side{display:none;}
-  .main{flex:1;overflow:hidden;}
+  .main{flex:1;overflow:hidden;display:flex;flex-direction:column;}
+  /* Ocultar tabs-handle en mobile — usamos mob-switcher */
+  .tabs-handle{display:none;}
+  /* Panels: flex:1 cuando activo para llenar espacio disponible */
+  .tab-panel.active{display:flex;flex:1;flex-direction:column;overflow:hidden;min-height:0;}
   /* Chat header */
   .chat-header{
     position:fixed;top:0;left:0;right:0;z-index:50;
@@ -244,6 +248,9 @@ html,body{height:100%;background:var(--void);color:var(--chalk);font-family:var(
     padding:16px 14px;gap:18px;
     padding-top:8px;
     padding-bottom:8px;
+    flex:1;
+    overflow-y:auto;
+    min-height:0;
   }
   /* input-area: static in mobile flex layout */
   .input-field{font-size:16px;min-height:46px;padding:11px 14px;}
@@ -800,8 +807,7 @@ footer.unrlvl-footer {
   }
 
   /* ajustar padding-bottom del chat para bottom bar */
-  .messages{padding-bottom:210px !important;}
-  .input-area{bottom:80px !important;}
+  /* input-area: static — managed by flex layout */
 
   /* suggestion chips horizontales en mobile */
   .mob-chips{
@@ -929,12 +935,12 @@ footer.unrlvl-footer {
 .tabs-bar.collapsed{height:0 !important;opacity:0;pointer-events:none;}
 .tabs-handle{
   display:flex;align-items:center;justify-content:center;
-  height:20px;background:#111828;
-  border-bottom:1px solid rgba(249,248,255,.06);
+  height:22px;background:#111828;
+  border-bottom:1px solid rgba(196,98,45,.2);
   cursor:pointer;flex-shrink:0;
-  color:rgba(249,248,255,.25);transition:all .2s;
+  color:rgba(196,98,45,.6);transition:all .2s;
 }
-.tabs-handle:hover{background:rgba(249,248,255,.04);color:rgba(249,248,255,.6);}
+.tabs-handle:hover{background:rgba(196,98,45,.07);color:#C4622D;}
 #tabs-arrow{transition:transform .3s ease;}
 #tabs-arrow.rotated{transform:rotate(180deg);}
 
@@ -1548,7 +1554,7 @@ function renderDots(){
 function enableInput(){
   const f=document.getElementById('input-field');
   f.disabled=false;
-  f.placeholder=userName?`${userName}, escriba su consulta...`:'Escriba su consulta sobre la Ley 284...';
+  f.placeholder=(userName&&!userName.includes('@'))?`${userName}, escriba su consulta...`:'Escriba su consulta sobre la Ley 284...';
   document.getElementById('send-btn').disabled=!f.value.trim();
 }
 
@@ -1559,8 +1565,9 @@ function startOnboarding(){
   const msgs=document.getElementById('messages');
   const wrap=document.createElement('div');
   wrap.className='msg agent';
-  const greeting=userName
-    ?`Bienvenido o bienvenida, <strong style="color:var(--chalk)">${userName}</strong>.`
+  const _dn=(userName&&!userName.includes('@'))?userName:'';
+  const greeting=_dn
+    ?`Bienvenido o bienvenida, <strong style="color:var(--chalk)">${_dn}</strong>.`
     :'Bienvenido o bienvenida a <strong style="color:var(--chalk)">ForumPHs Speaks</strong>.';
   wrap.innerHTML=`
     <div class="msg-role">ForumPHs Speaks</div>
@@ -2147,15 +2154,14 @@ function chooseContext(tab) {
     sel.style.opacity = '0';
     setTimeout(() => { sel.style.display = 'none'; }, 300);
   }
-  switchTab(tab);
+  // enterApp primero (muestra el app), luego switchTab para asegurar panel correcto
   enterApp();
-  // Mostrar switcher mobile con solo el tab opuesto
-  if (window.innerWidth <= 700) {
-    setTimeout(() => showMobSwitcher(tab), 500);
-  }
-  if (tab === 'propietario' && !isUnlimited) {
-    setTimeout(() => openAuthMini(), 400);
-  }
+  // switchTab después de que el app esté visible
+  setTimeout(() => {
+    switchTab(tab);
+    if (window.innerWidth <= 700) showMobSwitcher(tab);
+    if (tab === 'propietario' && !isUnlimited) openAuthMini();
+  }, 620);
 }
 
 // ══ TABS COLAPSABLE ═══════════════════════════════════════════════════════
