@@ -742,11 +742,12 @@ footer.unrlvl-footer {
 .home-btn:hover{background:rgba(249,248,255,.12);color:var(--chalk);}
 
 /* ── MOBILE BOTTOM TAB BAR ──────────────────────────────────────────── */
-.mob-tab-bar{display:none;}
+/* mob-tab-bar removed */
 
 @media(max-width:700px){
-  /* ocultar tabs-bar desktop en mobile */
+  /* ocultar tabs-bar y mob-tab-bar en mobile */
   .tabs-bar{display:none;}
+  .mob-tab-bar{display:none !important;}
 
   /* ocultar footer en mobile — la barra inferior ocupa ese espacio */
   footer.unrlvl-footer{display:none !important;}
@@ -1045,6 +1046,79 @@ footer.unrlvl-footer {
   .drawer-trigger{
     top:auto;bottom:130px;right:0;transform:none;
     border-radius:6px 0 0 6px;
+  }
+}
+
+/* ── MOBILE CONTEXT SWITCHER ─────────────────────────────────────────── */
+.mob-switcher{
+  position:fixed;bottom:0;left:0;right:0;z-index:100;
+  display:flex;flex-direction:column;
+  padding-bottom:env(safe-area-inset-bottom);
+}
+.mob-sw-handle{
+  display:flex;align-items:center;justify-content:center;
+  height:28px;background:#111828;
+  border-top:1px solid rgba(249,248,255,.08);
+  cursor:pointer;color:rgba(249,248,255,.3);
+  transition:all .2s;
+}
+.mob-sw-handle:hover{background:rgba(249,248,255,.04);color:rgba(249,248,255,.6);}
+#mob-sw-arrow{transition:transform .3s ease;}
+#mob-sw-arrow.rotated{transform:rotate(180deg);}
+.mob-sw-panel{
+  max-height:0;overflow:hidden;
+  transition:max-height .35s cubic-bezier(.4,0,.2,1);
+  background:#111828;
+}
+.mob-sw-panel.open{max-height:100px;}
+.mob-sw-btn{
+  width:100%;display:flex;align-items:center;justify-content:center;gap:12px;
+  padding:14px 20px;border:none;cursor:pointer;
+  font-family:'Cinzel',serif;font-size:10px;letter-spacing:.14em;
+  text-transform:uppercase;transition:filter .2s;
+}
+.mob-sw-btn-consulta{
+  background:linear-gradient(135deg,#1C2233,#232d45);
+  color:rgba(249,248,255,.7);border-top:1px solid rgba(249,248,255,.06);
+}
+.mob-sw-btn-prop{
+  background:linear-gradient(135deg,#C4622D,#e07840);
+  color:#fff;animation:terra-pulse 2.8s ease-in-out infinite;
+}
+.mob-sw-btn:hover{filter:brightness(1.15);}
+
+/* ── FAQ TRIGGER — más grande, brand terra ───────────────────────────── */
+.drawer-trigger{
+  position:fixed;right:0;top:50%;z-index:89;
+  transform:translateY(-50%);
+  background:linear-gradient(160deg,#C4622D,#e07840);
+  border:none;
+  padding:16px 10px;cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;gap:7px;
+  color:#fff;transition:all .2s;
+  border-radius:8px 0 0 8px;
+  box-shadow:-4px 0 20px rgba(196,98,45,.3);
+}
+.drawer-trigger span{
+  font-family:'Cinzel',serif;font-size:8px;letter-spacing:.18em;
+  text-transform:uppercase;writing-mode:vertical-lr;
+  transform:rotate(180deg);color:rgba(255,255,255,.85);
+}
+.drawer-trigger:hover{
+  background:linear-gradient(160deg,#a84e22,#C4622D);
+  box-shadow:-4px 0 28px rgba(196,98,45,.5);
+  padding-right:12px;
+}
+.drawer-trigger.hidden{opacity:0;pointer-events:none;}
+
+@media(max-width:700px){
+  /* Input sobre el switcher */
+  .messages{padding-bottom:210px !important;}
+  .input-area{bottom:84px !important;}
+  /* FAQ trigger más arriba en mobile */
+  .drawer-trigger{
+    bottom:160px;top:auto;transform:none;right:0;
+    padding:14px 9px;
   }
 }
 </style>
@@ -2017,17 +2091,17 @@ function openSelector() {
 }
 
 function chooseContext(tab) {
-  // Ocultar selector
   const sel = document.getElementById('ctx-selector');
   if (sel) {
     sel.style.opacity = '0';
     setTimeout(() => { sel.style.display = 'none'; }, 300);
   }
-  // Activar tab elegido y entrar al app
   switchTab(tab);
-  if (typeof mobSwitchTab === 'function') mobSwitchTab(tab);
   enterApp();
-  // Si eligió propietarios, abrir mini auth si no está autenticado
+  // Mostrar switcher mobile con solo el tab opuesto
+  if (window.innerWidth <= 700) {
+    setTimeout(() => showMobSwitcher(tab), 500);
+  }
   if (tab === 'propietario' && !isUnlimited) {
     setTimeout(() => openAuthMini(), 400);
   }
@@ -2067,6 +2141,70 @@ function closeDrawer() {
   document.getElementById('drawer-trigger').classList.remove('hidden');
 }
 
+
+// ══ MOBILE CONTEXT SWITCHER ═══════════════════════════════════════════════
+let mobSwitcherOpen = false;
+let currentMobContext = 'consulta';
+
+function showMobSwitcher(activeTab) {
+  currentMobContext = activeTab;
+  updateMobSwitcherPanel(activeTab);
+  const sw = document.getElementById('mob-switcher');
+  if (sw) sw.style.display = 'flex';
+}
+
+function updateMobSwitcherPanel(activeTab) {
+  const panel = document.getElementById('mob-sw-panel');
+  if (!panel) return;
+  if (activeTab === 'consulta') {
+    panel.innerHTML = `
+      <button class="mob-sw-btn mob-sw-btn-prop"
+        onclick="switchMobContext('propietario')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <rect x="3" y="11" width="18" height="11" rx="2"/>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+        </svg>
+        Ir a Propietarios ForumPHs
+      </button>`;
+  } else {
+    panel.innerHTML = `
+      <button class="mob-sw-btn mob-sw-btn-consulta"
+        onclick="switchMobContext('consulta')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+        </svg>
+        Ir a Consulta Ley 284
+      </button>`;
+  }
+}
+
+function toggleMobSwitcher() {
+  const panel = document.getElementById('mob-sw-panel');
+  const arrow = document.getElementById('mob-sw-arrow');
+  if (!panel) return;
+  mobSwitcherOpen = !mobSwitcherOpen;
+  panel.classList.toggle('open', mobSwitcherOpen);
+  if (arrow) arrow.classList.toggle('rotated', mobSwitcherOpen);
+}
+
+function switchMobContext(tab) {
+  switchTab(tab);
+  currentMobContext = tab;
+  updateMobSwitcherPanel(tab);
+  // cerrar panel
+  mobSwitcherOpen = false;
+  const panel = document.getElementById('mob-sw-panel');
+  const arrow = document.getElementById('mob-sw-arrow');
+  if (panel) panel.classList.remove('open');
+  if (arrow) arrow.classList.remove('rotated');
+  // si propietario y no autenticado
+  if (tab === 'propietario' && !isUnlimited) {
+    setTimeout(() => openAuthMini(), 300);
+  }
+}
+
 </script>
 
 
@@ -2080,28 +2218,17 @@ function closeDrawer() {
   </div>
 </div>
 
-<!-- ══ MOBILE BOTTOM TAB BAR ═══════════════════════════════════════════ -->
-<div class="mob-tab-bar" id="mob-tab-bar">
-  <!-- consulta -->
-  <button class="mob-tab-btn mob-active" id="mob-tab-consulta" onclick="switchTab('consulta');mobSwitchTab('consulta')">
-    <div class="mob-t-icon">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
-        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
-      </svg>
-    </div>
-    <span class="mob-t-label">Consulta</span>
-  </button>
-  <!-- propietarios -->
-  <button class="mob-tab-btn" id="mob-tab-propietario" onclick="switchTab('propietario');mobSwitchTab('propietario')">
-    <div class="mob-t-icon">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
-        <rect x="3" y="11" width="18" height="11" rx="2"/>
-        <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-      </svg>
-    </div>
-    <span class="mob-t-label">Propietarios</span>
-    <span class="mob-t-badge">Exclusivo</span>
-  </button>
+<!-- ══ MOBILE CONTEXT SWITCHER (reemplaza tab bar) ══════════════════════ -->
+<div class="mob-switcher" id="mob-switcher" style="display:none">
+  <div class="mob-sw-handle" id="mob-sw-handle" onclick="toggleMobSwitcher()">
+    <svg id="mob-sw-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none"
+      stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+      <polyline points="18 15 12 9 6 15"/>
+    </svg>
+  </div>
+  <div class="mob-sw-panel" id="mob-sw-panel">
+    <!-- Solo muestra el tab opuesto — se rellena via JS -->
+  </div>
 </div>
 
 <!-- ══ MOBILE SUGGESTION CHIPS (se insertan en el chat) ═════════════════ -->
