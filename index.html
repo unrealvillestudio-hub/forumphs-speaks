@@ -1554,29 +1554,57 @@ function startOnboarding(){
   const msgs=document.getElementById('messages');
   const wrap=document.createElement('div');
   wrap.className='msg agent';
-  const _dn=(userName&&!userName.includes('@'))?userName:'';
-  const greeting=_dn
-    ?`Bienvenido o bienvenida, <strong style="color:var(--chalk)">${_dn}</strong>.`
-    :'Bienvenido o bienvenida a <strong style="color:var(--chalk)">ForumPHs Speaks</strong>.';
-  wrap.innerHTML=`
-    <div class="msg-role">ForumPHs Speaks</div>
-    <div class="name-bubble">
-      <div style="font-family:var(--fn);font-size:14px;color:var(--c72);line-height:1.78;">
-        ${greeting}<br><br>
-        Soy un asistente especializado en la <strong style="color:var(--chalk)">Ley 284 de 2022</strong>, la ley que regula la Propiedad Horizontal en Panamá. Estoy aquí para ayudarle a entender sus derechos y obligaciones en lenguaje claro, sin tecnicismos.<br><br>
-        No soy abogado, pero he sido entrenado con la ley completa y soy supervisado por <strong style="color:var(--chalk)">Ivette Flores</strong>, Abogada y Gerente General de ForumPHs.<br><br>
-        ${!userName?'¿Cómo debería llamarle?':'¿Cuál es su primera consulta?'}
-      </div>
-      ${!userName?`<div class="name-input-row">
-        <input class="name-input" type="text" id="name-input" placeholder="Su nombre..."
-          onkeydown="if(event.key==='Enter') submitName()">
-        <button class="name-submit" onclick="submitName()">Empezar  </button>
-      </div>`:''}
+
+  // Detectar propietario verificado
+  const ctx = ownerContext || (()=>{
+    try { const s=localStorage.getItem('fphs_owner_ctx'); return s?JSON.parse(s):null; } catch{return null;}
+  })();
+  const isOwner = !!(ctx && ctx.name);
+  const _dn = (userName && !userName.includes('@')) ? userName : (ctx ? ctx.name : '');
+  const alreadyWelcomed = localStorage.getItem('fphs_owner_welcomed') === '1';
+
+  let bodyHtml = '';
+
+  if (isOwner && !alreadyWelcomed) {
+    const building = (ctx.building && ctx.building !== 'Dev') ? ctx.building : 'ForumPHs';
+    const unit = ctx.unit ? ` (Unidad ${ctx.unit})` : '';
+    bodyHtml = `<div style="font-family:var(--fn);font-size:14px;color:var(--c72);line-height:1.85;">
+      Hola, <strong style="color:var(--chalk)">${_dn}</strong>, bienvenido a <strong style="color:var(--chalk)">ForumPHs Speaks</strong>.<br><br>
+      Quiero que sepa que usted cuenta con un <strong style="color:#C4622D">Golden Pass</strong> para realizar todas las consultas que requiera sin l&iacute;mites, por ser propietario de <strong style="color:var(--chalk)">${building}</strong>${unit}, uno de los PHs administrados por ForumPHs.<br><br>
+      Soy su asistente especializado en la <strong style="color:var(--chalk)">Ley 284 de 2022</strong>. Estoy aqu&iacute; para ayudarle a entender sus derechos y obligaciones como propietario, en lenguaje claro y sin tecnicismos, supervisado por <strong style="color:var(--chalk)">Ivette Flores</strong>, Abogada y Gerente General de ForumPHs.<br><br>
+      &iquest;Cu&aacute;l es su consulta hoy?
     </div>`;
+    localStorage.setItem('fphs_owner_welcomed','1');
+
+  } else if (isOwner && alreadyWelcomed) {
+    bodyHtml = `<div style="font-family:var(--fn);font-size:14px;color:var(--c72);line-height:1.85;">
+      Hola <strong style="color:var(--chalk)">${_dn}</strong>, bienvenido de vuelta a ForumPHs Speaks.<br><br>
+      &iquest;En qu&eacute; le puedo ayudar hoy?
+    </div>`;
+
+  } else {
+    const greeting = _dn
+      ? `Bienvenido o bienvenida, <strong style="color:var(--chalk)">${_dn}</strong>.`
+      : 'Bienvenido o bienvenida a <strong style="color:var(--chalk)">ForumPHs Speaks</strong>.';
+    bodyHtml = `<div style="font-family:var(--fn);font-size:14px;color:var(--c72);line-height:1.78;">
+      ${greeting}<br><br>
+      Soy un asistente especializado en la <strong style="color:var(--chalk)">Ley 284 de 2022</strong>, la ley que regula la Propiedad Horizontal en Panam&aacute;. Estoy aqu&iacute; para ayudarle a entender sus derechos y obligaciones en lenguaje claro, sin tecnicismos.<br><br>
+      No soy abogado, pero he sido entrenado con la ley completa y soy supervisado por <strong style="color:var(--chalk)">Ivette Flores</strong>, Abogada y Gerente General de ForumPHs.<br><br>
+      ${!_dn ? '&iquest;C&oacute;mo deber&iacute;a llamarle?' : '&iquest;Cu&aacute;l es su primera consulta?'}
+    </div>
+    ${!_dn ? `<div class="name-input-row">
+      <input class="name-input" type="text" id="name-input" placeholder="Su nombre..."
+        onkeydown="if(event.key==='Enter') submitName()">
+      <button class="name-submit" onclick="submitName()">Empezar &#x2192;</button>
+    </div>` : ''}`;
+  }
+
+  wrap.innerHTML = `<div class="msg-role">ForumPHs Speaks</div><div class="name-bubble">${bodyHtml}</div>`;
   msgs.appendChild(wrap);
-  msgs.scrollTop=msgs.scrollHeight;
-  if(!userName) setTimeout(()=>document.getElementById('name-input')?.focus(),100);
+  msgs.scrollTop = msgs.scrollHeight;
+  if(!_dn && !isOwner) setTimeout(()=>document.getElementById('name-input')?.focus(),100);
 }
+
 
 function submitName(){
   const input=document.getElementById('name-input');
@@ -1861,6 +1889,9 @@ async function confirmOtp() {
     localStorage.setItem('fphs_email', panel.dataset.pendingEmail || '');
     isUnlimited = true;
     ownerContext = data.owner_context;
+    if (data.owner_context) {
+      try { localStorage.setItem('fphs_owner_ctx', JSON.stringify(data.owner_context)); } catch(e){}
+    }
     const building = data.building || panel.dataset.pendingBuilding || 'ForumPHs';
     const unit = data.unit || panel.dataset.pendingUnit || '';
     const unitStr = unit ? `   Unidad ${unit}` : '';
@@ -2051,6 +2082,9 @@ async function authConfirmOtp() {
     if (data.name) { localStorage.setItem('fphs_name', data.name); userName = data.name; }
     isUnlimited = true;
     ownerContext = data.owner_context;
+    if (data.owner_context) {
+      try { localStorage.setItem('fphs_owner_ctx', JSON.stringify(data.owner_context)); } catch(e){}
+    }
 
     // Actualizar UI de sesi n en sidebar
     const sessionTxt = document.getElementById('session-txt');
