@@ -414,6 +414,116 @@ footer.unrlvl-footer {
   .fp-col-center,.fp-addr { display: none; }
 }
 
+
+/* ══ TABS ════════════════════════════════════════════════════════════════ */
+.tabs-bar{
+  display:flex;gap:2px;padding:0 16px;background:var(--void);
+  border-bottom:1px solid var(--c06);flex-shrink:0;
+}
+.tab-btn{
+  font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;
+  letter-spacing:.08em;text-transform:uppercase;
+  padding:12px 18px 10px;border:none;background:transparent;
+  color:var(--dim);cursor:pointer;border-bottom:2px solid transparent;
+  transition:color .2s,border-color .2s;white-space:nowrap;
+}
+.tab-btn.active{color:var(--terra);border-bottom-color:var(--terra);}
+.tab-btn:hover:not(.active){color:var(--parch);}
+.tab-panel{display:none;flex:1;flex-direction:column;overflow:hidden;}
+.tab-panel.active{display:flex;}
+
+/* ══ OWNER TAB ═══════════════════════════════════════════════════════════ */
+.owner-panel{
+  display:flex;flex-direction:column;align-items:center;
+  justify-content:center;flex:1;padding:40px 32px;gap:24px;
+  text-align:center;
+}
+.owner-icon{
+  width:64px;height:64px;border-radius:50%;
+  background:rgba(92,52,114,.12);border:1px solid rgba(92,52,114,.3);
+  display:flex;align-items:center;justify-content:center;font-size:28px;
+}
+.owner-title{
+  font-family:'EB Garamond',serif;font-size:24px;font-weight:400;
+  color:var(--parch);line-height:1.2;
+}
+.owner-sub{font-size:13px;color:var(--dim);line-height:1.6;max-width:380px;}
+.owner-form{display:flex;flex-direction:column;gap:10px;width:100%;max-width:380px;}
+.owner-input{
+  background:rgba(255,255,255,.05);border:1px solid var(--c06);
+  color:var(--parch);padding:12px 16px;font-size:14px;
+  font-family:'DM Sans',sans-serif;outline:none;
+  transition:border-color .2s;
+}
+.owner-input:focus{border-color:var(--ame);}
+.owner-input::placeholder{color:var(--dim);}
+.owner-btn{
+  background:var(--terra);color:#fff;border:none;
+  padding:13px 24px;font-size:13px;font-weight:600;
+  letter-spacing:.06em;text-transform:uppercase;
+  cursor:pointer;transition:opacity .2s;font-family:'DM Sans',sans-serif;
+}
+.owner-btn:hover{opacity:.85;}
+.owner-btn:disabled{opacity:.4;cursor:not-allowed;}
+.owner-error{font-size:12px;color:#e07070;text-align:center;}
+.owner-success{
+  display:flex;flex-direction:column;align-items:center;gap:16px;
+  padding:32px;text-align:center;
+}
+.owner-success-icon{font-size:40px;}
+.owner-success-name{
+  font-family:'EB Garamond',serif;font-size:22px;color:var(--parch);
+}
+.owner-badge{
+  font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--terra);background:rgba(196,98,45,.12);
+  border:1px solid rgba(196,98,45,.3);padding:5px 14px;
+}
+.owner-building{font-size:13px;color:var(--dim);}
+.owner-go-chat{
+  background:rgba(92,52,114,.2);border:1px solid rgba(92,52,114,.4);
+  color:var(--ame-l);padding:10px 24px;font-size:12px;
+  letter-spacing:.08em;text-transform:uppercase;cursor:pointer;
+  font-family:'DM Sans',sans-serif;font-weight:600;
+  transition:background .2s;margin-top:8px;
+}
+.owner-go-chat:hover{background:rgba(92,52,114,.35);}
+
+/* ══ INLINE AUTH (magic link / propietario) ══════════════════════════════ */
+.auth-link{
+  font-size:11px;color:var(--terra);cursor:pointer;
+  text-decoration:underline;text-underline-offset:2px;
+  background:none;border:none;padding:0;font-family:inherit;
+  letter-spacing:.01em;
+}
+.auth-link:hover{opacity:.75;}
+.auth-mini-overlay{
+  position:fixed;inset:0;z-index:500;
+  background:rgba(10,10,16,.85);backdrop-filter:blur(4px);
+  display:none;align-items:center;justify-content:center;padding:24px;
+}
+.auth-mini-overlay.show{display:flex;}
+.auth-mini-box{
+  background:var(--carbon);border:1px solid var(--c06);
+  border-top:3px solid var(--terra);
+  padding:36px 32px;max-width:420px;width:100%;
+  animation:fadein .2s ease;
+}
+.auth-mini-eyebrow{
+  font-family:'Cinzel',serif;font-size:8px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--terra);margin-bottom:12px;
+}
+.auth-mini-title{
+  font-family:'EB Garamond',serif;font-size:22px;color:var(--parch);
+  margin-bottom:8px;line-height:1.2;
+}
+.auth-mini-sub{font-size:13px;color:var(--dim);line-height:1.6;margin-bottom:20px;}
+.auth-mini-close{
+  position:absolute;top:16px;right:20px;
+  background:none;border:none;color:var(--dim);
+  font-size:20px;cursor:pointer;line-height:1;
+}
+.auth-mini-box{position:relative;}
 </style>
 </head>
 <body>
@@ -445,6 +555,11 @@ footer.unrlvl-footer {
       <div class="dots-row" id="dots-row"></div>
       <div class="session-txt" id="session-txt">Conectando...</div>
     </div>
+    <div style="padding:0 20px 16px;border-bottom:1px solid var(--c06)">
+      <button class="auth-link" onclick="openAuthMini()" id="auth-link-sidebar" style="display:none">
+        🔑 Soy propietario — autenticar
+      </button>
+    </div>
     <div class="suggested-block">
       <span class="block-label">Consultas frecuentes</span>
       <button class="sug-btn" onclick="useSuggestion(this)">¿Pueden cortarme el agua si no pago las cuotas?</button>
@@ -466,6 +581,15 @@ footer.unrlvl-footer {
   </aside>
 
   <main class="main">
+
+    <!-- ══ TABS BAR ══════════════════════════════════════════════════════ -->
+    <div class="tabs-bar">
+      <button class="tab-btn active" id="tab-consulta" onclick="switchTab('consulta')">💬 Consulta Ley 284</button>
+      <button class="tab-btn" id="tab-propietario" onclick="switchTab('propietario')">🏠 Propietarios ForumPHs</button>
+    </div>
+
+    <!-- ══ TAB: CONSULTA (existente) ════════════════════════════════════ -->
+    <div class="tab-panel active" id="panel-consulta">
     <div class="chat-header">
       <div class="header-title">La <em>Ley 284</em> explicada en lenguaje humano</div>
       <div class="online"><span class="online-dot"></span>Activo</div>
@@ -507,7 +631,26 @@ footer.unrlvl-footer {
         <div class="fp-addr">unrealvillestudio.com &nbsp;·&nbsp; Hollywood, FL 33021</div>
       </div>
     </footer>
-  </main>
+  
+    </div><!-- /tab-panel consulta -->
+
+    <!-- ══ TAB: PROPIETARIOS ════════════════════════════════════════════ -->
+    <div class="tab-panel" id="panel-propietario">
+      <div class="owner-panel" id="owner-panel-content">
+        <div class="owner-icon">🏠</div>
+        <div class="owner-title">Acceso para <em>Propietarios</em></div>
+        <div class="owner-sub">Si su edificio es administrado por ForumPHs, ingrese su correo registrado para activar consultas ilimitadas y contexto de su edificio.</div>
+        <div class="owner-form">
+          <input class="owner-input" type="email" id="owner-email"
+            placeholder="correo@ejemplo.com"
+            onkeydown="if(event.key==='Enter') verifyOwner()">
+          <button class="owner-btn" id="owner-verify-btn" onclick="verifyOwner()">Verificar acceso</button>
+          <div class="owner-error" id="owner-error" style="display:none"></div>
+        </div>
+      </div>
+    </div><!-- /tab-panel propietarios -->
+
+</main>
 </div>
 
 <!-- MODAL -->
@@ -518,6 +661,12 @@ footer.unrlvl-footer {
       <h2 class="modal-title">Ha usado sus 5 consultas de cortesía.</h2>
       <p class="modal-sub">Déjenos su correo para continuar con consultas ilimitadas. Si quiere, díganos también su nombre para personalizar la conversación.</p>
       <input class="modal-input" type="text" id="reg-name" placeholder="Su nombre (opcional)">
+      <div style="margin-bottom:16px;padding:12px 14px;background:rgba(92,52,114,.1);border:1px solid rgba(92,52,114,.25)">
+        <div style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--ame);margin-bottom:4px;font-family:'Cinzel',serif">¿Es propietario ForumPHs?</div>
+        <div style="font-size:12px;color:var(--dim);margin-bottom:8px">Si su edificio es administrado por ForumPHs, autentíquese para acceso ilimitado y contextualizado.</div>
+        <button class="auth-link" style="font-size:12px" onclick="closeModal();openAuthMini()">Autenticar como propietario →</button>
+      </div>
+      <div style="font-size:11px;color:var(--dim);margin-bottom:10px;text-align:center">— o continúe con correo general —</div>
       <input class="modal-input" type="email" id="reg-email" placeholder="correo@ejemplo.com"
         onkeydown="if(event.key==='Enter') submitRegistration()">
       <div class="modal-error" id="modal-error">Por favor ingrese un correo válido.</div>
@@ -536,6 +685,7 @@ footer.unrlvl-footer {
 <script>
 const SB = 'https://amlvyycfepwhiindxgzw.supabase.co/functions/v1';
 const FREE_LIMIT = 5;
+let ownerContext = null;
 let sessionToken, sessionId, questionsUsed=0, isUnlimited=false, isGoldenPass=false;
 let userName='', loading=false, history=[], onboardingDone=false, sessionReady=false;
 
@@ -563,6 +713,11 @@ async function initSession(){
     userName=d.name||savedName||'';
     if(d.email) localStorage.setItem('fphs_email',d.email);
     if(d.name)  localStorage.setItem('fphs_name', d.name);
+    // Mostrar link "Soy propietario" si no está ya autenticado como tal
+    if(!d.is_golden_pass) {
+      const lnk = document.getElementById('auth-link-sidebar');
+      if(lnk) lnk.style.display = 'block';
+    }
     sessionReady=true;
   } catch(e){ console.warn('init error',e); }
 }
@@ -808,7 +963,350 @@ async function submitRegistration(){
 
 // ── START ──────────────────────────────────────────────────────────────────
 initSession(); // corre en background mientras el usuario lee el splash
+
+
+// ══ TAB SYSTEM ══════════════════════════════════════════════════════════════
+function switchTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  document.getElementById('panel-' + tab).classList.add('active');
+}
+
+// ══ VERIFY OWNER — PASO 1: verificar email ══════════════════════════════════
+async function verifyOwner() {
+  const emailInput = document.getElementById('owner-email');
+  const btn = document.getElementById('owner-verify-btn');
+  const errDiv = document.getElementById('owner-error');
+  const email = emailInput.value.trim().toLowerCase();
+
+  if (!email || !email.includes('@')) {
+    errDiv.textContent = 'Por favor ingrese un correo válido.';
+    errDiv.style.display = 'block';
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Verificando...';
+  errDiv.style.display = 'none';
+
+  try {
+    const res = await fetch(`${SB}/fphs-session`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'verify_owner', session_token: sessionToken, email })
+    });
+    const data = await res.json();
+
+    if (!data.found) {
+      errDiv.textContent = data.message || 'Correo no encontrado en el registro de propietarios.';
+      errDiv.style.display = 'block';
+      btn.disabled = false;
+      btn.textContent = 'Verificar acceso';
+      return;
+    }
+
+    // Email encontrado — mostrar paso 2: OTP
+    const panel = document.getElementById('owner-panel-content');
+    const building = data.building || 'ForumPHs';
+    const unit = data.unit ? ` · Unidad ${data.unit}` : '';
+    // Guardar contexto temporal
+    panel.dataset.pendingEmail = email;
+    panel.dataset.pendingName = data.name || '';
+    panel.dataset.pendingBuilding = data.building || '';
+    panel.dataset.pendingUnit = data.unit || '';
+    // dev mode: si la respuesta trae _dev_otp, mostrarlo
+    const devHint = data._dev_otp
+      ? `<div style="font-size:11px;color:var(--ame);margin-top:8px;opacity:.7">🛠 Dev OTP: <strong>${data._dev_otp}</strong></div>`
+      : '<div style="font-size:12px;color:var(--dim);margin-top:8px">Revise su correo. El código llega en menos de 1 minuto.</div>';
+
+    panel.innerHTML = `
+      <div class="owner-icon">📬</div>
+      <div class="owner-title">Verifique su <em>identidad</em></div>
+      <div class="owner-sub">
+        Enviamos un código de 6 dígitos a <strong>${email}</strong>.
+        Ingrese el código para activar su acceso.
+      </div>
+      ${devHint}
+      <div class="owner-form" style="margin-top:16px">
+        <input class="owner-input" type="text" id="owner-otp"
+          placeholder="Código de 6 dígitos"
+          maxlength="6" inputmode="numeric"
+          style="letter-spacing:.3em;font-size:20px;text-align:center"
+          onkeydown="if(event.key==='Enter') confirmOtp()">
+        <button class="owner-btn" id="owner-otp-btn" onclick="confirmOtp()">Confirmar código</button>
+        <div class="owner-error" id="owner-otp-error" style="display:none"></div>
+        <button onclick="resetOwnerPanel()" style="background:none;border:none;color:var(--dim);font-size:12px;cursor:pointer;margin-top:4px">
+          ← Cambiar correo
+        </button>
+      </div>
+    `;
+    document.getElementById('owner-otp')?.focus();
+
+  } catch(e) {
+    errDiv.textContent = 'Error de conexión. Intente de nuevo.';
+    errDiv.style.display = 'block';
+    btn.disabled = false;
+    btn.textContent = 'Verificar acceso';
+  }
+}
+
+// ══ CONFIRM OTP — PASO 2: confirmar código ═══════════════════════════════════
+async function confirmOtp() {
+  const otpInput = document.getElementById('owner-otp');
+  const btn = document.getElementById('owner-otp-btn');
+  const errDiv = document.getElementById('owner-otp-error');
+  const otp = otpInput.value.trim();
+  const panel = document.getElementById('owner-panel-content');
+
+  if (!otp || otp.length !== 6) {
+    errDiv.textContent = 'Ingrese el código de 6 dígitos.';
+    errDiv.style.display = 'block';
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Verificando...';
+  errDiv.style.display = 'none';
+
+  try {
+    const res = await fetch(`${SB}/fphs-session`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'confirm_otp', session_token: sessionToken, otp })
+    });
+    const data = await res.json();
+
+    if (!data.confirmed) {
+      errDiv.textContent = data.error || 'Código incorrecto o expirado.';
+      errDiv.style.display = 'block';
+      btn.disabled = false;
+      btn.textContent = 'Confirmar código';
+      return;
+    }
+
+    // ✅ Verificado — activar sesión
+    if (data.name) { localStorage.setItem('fphs_name', data.name); userName = data.name; }
+    localStorage.setItem('fphs_email', panel.dataset.pendingEmail || '');
+    isUnlimited = true;
+    ownerContext = data.owner_context;
+    const building = data.building || panel.dataset.pendingBuilding || 'ForumPHs';
+    const unit = data.unit || panel.dataset.pendingUnit || '';
+    const unitStr = unit ? ` · Unidad ${unit}` : '';
+
+    panel.innerHTML = `
+      <div class="owner-success">
+        <div class="owner-success-icon">✅</div>
+        <div class="owner-success-name">${data.name}</div>
+        <div class="owner-badge">Propietario verificado</div>
+        <div class="owner-building">${building}${unitStr}</div>
+        <div class="owner-sub" style="margin-top:8px">
+          Tiene acceso ilimitado a ForumPHs Speaks.
+          Sus consultas ahora incluyen contexto de su edificio.
+        </div>
+        <button class="owner-go-chat" onclick="switchTab('consulta')">
+          Ir al chat →
+        </button>
+      </div>
+    `;
+
+  } catch(e) {
+    errDiv.textContent = 'Error de conexión. Intente de nuevo.';
+    errDiv.style.display = 'block';
+    btn.disabled = false;
+    btn.textContent = 'Confirmar código';
+  }
+}
+
+// Reset panel a estado inicial
+function resetOwnerPanel() {
+  document.getElementById('owner-panel-content').innerHTML = `
+    <div class="owner-icon">🏠</div>
+    <div class="owner-title">Acceso para <em>Propietarios</em></div>
+    <div class="owner-sub">Si su edificio es administrado por ForumPHs, ingrese su correo registrado para activar consultas ilimitadas y contexto de su edificio.</div>
+    <div class="owner-form">
+      <input class="owner-input" type="email" id="owner-email"
+        placeholder="correo@ejemplo.com"
+        onkeydown="if(event.key==='Enter') verifyOwner()">
+      <button class="owner-btn" id="owner-verify-btn" onclick="verifyOwner()">Verificar acceso</button>
+      <div class="owner-error" id="owner-error" style="display:none"></div>
+    </div>
+  `;
+}
+
+
+// ══ AUTH MINI MODAL — magic link propietario ════════════════════════════════
+
+function openAuthMini() {
+  renderAuthStep('email');
+  document.getElementById('auth-mini-overlay').classList.add('show');
+  setTimeout(() => document.getElementById('auth-email-input')?.focus(), 100);
+}
+
+function closeAuthMini() {
+  document.getElementById('auth-mini-overlay').classList.remove('show');
+}
+
+function renderAuthStep(step, data = {}) {
+  const box = document.getElementById('auth-mini-content');
+  if (step === 'email') {
+    box.innerHTML = `
+      <div class="auth-mini-eyebrow">ForumPHs · Acceso Propietario</div>
+      <h2 class="auth-mini-title">Su <em>correo registrado</em></h2>
+      <p class="auth-mini-sub">Ingrese el correo con el que está registrado en su PH. Le enviaremos un código de verificación.</p>
+      <input class="modal-input" type="email" id="auth-email-input"
+        placeholder="correo@ejemplo.com"
+        style="width:100%;box-sizing:border-box;margin-bottom:10px"
+        onkeydown="if(event.key==='Enter') authVerifyEmail()">
+      <button class="owner-btn" style="width:100%" onclick="authVerifyEmail()">Enviar código →</button>
+      <div id="auth-email-error" style="display:none;margin-top:8px;font-size:12px;color:#e07070;text-align:center"></div>
+    `;
+  }
+
+  if (step === 'otp') {
+    const devHint = data._dev_otp
+      ? `<div style="font-size:11px;color:var(--ame);margin:8px 0;opacity:.8;text-align:center">🛠 Dev — Código: <strong>${data._dev_otp}</strong></div>`
+      : `<div style="font-size:12px;color:var(--dim);margin:8px 0;text-align:center">Revise su correo. Llega en menos de 1 minuto.</div>`;
+    box.innerHTML = `
+      <div class="auth-mini-eyebrow">ForumPHs · Verificación</div>
+      <h2 class="auth-mini-title"><em>Código</em> enviado</h2>
+      <p class="auth-mini-sub">Ingresamos un código de 6 dígitos a <strong>${data.email}</strong>.</p>
+      ${devHint}
+      <input class="modal-input" type="text" id="auth-otp-input"
+        placeholder="000000" maxlength="6" inputmode="numeric"
+        style="width:100%;box-sizing:border-box;text-align:center;letter-spacing:.35em;font-size:22px;margin-bottom:10px"
+        onkeydown="if(event.key==='Enter') authConfirmOtp()">
+      <button class="owner-btn" style="width:100%" onclick="authConfirmOtp()">Verificar →</button>
+      <div id="auth-otp-error" style="display:none;margin-top:8px;font-size:12px;color:#e07070;text-align:center"></div>
+      <div style="text-align:center;margin-top:12px">
+        <button onclick="renderAuthStep('email')" style="background:none;border:none;color:var(--dim);font-size:12px;cursor:pointer;text-decoration:underline">
+          ← Cambiar correo
+        </button>
+      </div>
+    `;
+    setTimeout(() => document.getElementById('auth-otp-input')?.focus(), 100);
+  }
+
+  if (step === 'success') {
+    const unitStr = data.unit ? ` · Unidad ${data.unit}` : '';
+    box.innerHTML = `
+      <div style="text-align:center;padding:8px 0">
+        <div style="font-size:44px;margin-bottom:16px">✅</div>
+        <div style="font-family:'EB Garamond',serif;font-size:22px;color:var(--parch);margin-bottom:8px">${data.name}</div>
+        <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--terra);background:rgba(196,98,45,.12);border:1px solid rgba(196,98,45,.3);padding:5px 16px;display:inline-block;margin-bottom:12px">Propietario verificado</div>
+        <div style="font-size:13px;color:var(--dim);margin-bottom:20px">${data.building || 'ForumPHs'}${unitStr}</div>
+        <div style="font-size:13px;color:var(--dim);margin-bottom:24px;line-height:1.6">
+          Acceso ilimitado activado. Sus consultas ahora incluyen el contexto de su edificio.
+        </div>
+        <button class="owner-btn" style="width:100%" onclick="closeAuthMini()">Comenzar a consultar →</button>
+      </div>
+    `;
+    // Mostrar link en sidebar para futuras sesiones
+    const sidebarLink = document.getElementById('auth-link-sidebar');
+    if (sidebarLink) sidebarLink.style.display = 'none'; // ya autenticado
+  }
+}
+
+// Paso 1: verificar email
+async function authVerifyEmail() {
+  const emailInput = document.getElementById('auth-email-input');
+  const errDiv = document.getElementById('auth-email-error');
+  const btn = emailInput?.nextElementSibling;
+  const email = emailInput?.value.trim().toLowerCase();
+
+  if (!email || !email.includes('@')) {
+    errDiv.textContent = 'Por favor ingrese un correo válido.';
+    errDiv.style.display = 'block';
+    return;
+  }
+  if (btn) { btn.disabled = true; btn.textContent = 'Enviando...'; }
+  errDiv.style.display = 'none';
+
+  try {
+    const res = await fetch(`${SB}/fphs-session`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'verify_owner', session_token: sessionToken, email })
+    });
+    const data = await res.json();
+
+    if (!data.found) {
+      errDiv.textContent = data.message || 'Correo no encontrado en los registros de ForumPHs.';
+      errDiv.style.display = 'block';
+      if (btn) { btn.disabled = false; btn.textContent = 'Enviar código →'; }
+      return;
+    }
+    // Pasar a step OTP
+    renderAuthStep('otp', { ...data, email });
+
+  } catch(e) {
+    errDiv.textContent = 'Error de conexión. Intente de nuevo.';
+    errDiv.style.display = 'block';
+    if (btn) { btn.disabled = false; btn.textContent = 'Enviar código →'; }
+  }
+}
+
+// Paso 2: confirmar OTP
+async function authConfirmOtp() {
+  const otpInput = document.getElementById('auth-otp-input');
+  const errDiv = document.getElementById('auth-otp-error');
+  const btn = otpInput?.nextElementSibling;
+  const otp = otpInput?.value.trim();
+
+  if (!otp || otp.length !== 6) {
+    errDiv.textContent = 'Ingrese el código de 6 dígitos.';
+    errDiv.style.display = 'block';
+    return;
+  }
+  if (btn) { btn.disabled = true; btn.textContent = 'Verificando...'; }
+  errDiv.style.display = 'none';
+
+  try {
+    const res = await fetch(`${SB}/fphs-session`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'confirm_otp', session_token: sessionToken, otp })
+    });
+    const data = await res.json();
+
+    if (!data.confirmed) {
+      errDiv.textContent = data.error || 'Código incorrecto o expirado.';
+      errDiv.style.display = 'block';
+      if (btn) { btn.disabled = false; btn.textContent = 'Verificar →'; }
+      return;
+    }
+
+    // ✅ Activar sesión
+    if (data.name) { localStorage.setItem('fphs_name', data.name); userName = data.name; }
+    isUnlimited = true;
+    ownerContext = data.owner_context;
+
+    // Actualizar UI de sesión en sidebar
+    const sessionTxt = document.getElementById('session-txt');
+    if (sessionTxt) sessionTxt.textContent = `${data.name} · Propietario`;
+    const sidebarLink = document.getElementById('auth-link-sidebar');
+    if (sidebarLink) sidebarLink.style.display = 'none';
+
+    renderAuthStep('success', data);
+
+  } catch(e) {
+    errDiv.textContent = 'Error de conexión. Intente de nuevo.';
+    errDiv.style.display = 'block';
+    if (btn) { btn.disabled = false; btn.textContent = 'Verificar →'; }
+  }
+}
+
 </script>
 
+
+<!-- ══ AUTH MINI MODAL (magic link propietario) ════════════════════════ -->
+<div class="auth-mini-overlay" id="auth-mini-overlay">
+  <div class="auth-mini-box">
+    <button class="auth-mini-close" onclick="closeAuthMini()">×</button>
+    <div id="auth-mini-content">
+      <!-- contenido dinámico via renderAuthStep() -->
+    </div>
+  </div>
+</div>
 </body>
 </html>
