@@ -733,16 +733,6 @@ footer.unrlvl-footer {
 }
 .auth-mini-box{position:relative;}
 
-/* home button */
-.home-btn{
-  flex-shrink:0;width:30px;height:30px;border:none;
-  background:rgba(249,248,255,.06);border-radius:4px;
-  display:flex;align-items:center;justify-content:center;
-  color:rgba(249,248,255,.35);cursor:pointer;
-  transition:all .18s;
-}
-.home-btn:hover{background:rgba(249,248,255,.12);color:var(--chalk);}
-
 /* ── MOBILE BOTTOM TAB BAR ──────────────────────────────────────────── */
 /* mob-tab-bar removed */
 
@@ -755,7 +745,7 @@ footer.unrlvl-footer {
   footer.unrlvl-footer{display:none !important;}
 
   /* panel-propietario full height mobile */
-  #panel-propietario{height:100%;overflow-y:auto;flex:1;}
+  #panel-propietario{height:100%;overflow-y:auto;flex:1;padding-bottom:64px;}
   #panel-propietario .owner-panel{padding:32px 24px;min-height:100%;}
 
   /* bottom tab bar mobile */
@@ -807,7 +797,8 @@ footer.unrlvl-footer {
   }
 
   /* ajustar padding-bottom del chat para bottom bar */
-  /* input-area: static — managed by flex layout */
+  .input-area{position:fixed !important;bottom:40px !important;left:0;right:0;z-index:50;padding:10px 14px;background:rgba(10,9,12,.98);}
+  .messages{padding-bottom:120px !important;padding-top:8px !important;}
 
   /* suggestion chips horizontales en mobile */
   .mob-chips{
@@ -871,6 +862,9 @@ footer.unrlvl-footer {
   padding:28px 24px;cursor:pointer;position:relative;overflow:hidden;
   transition:transform .2s,box-shadow .2s,border-color .2s;
   display:flex;flex-direction:column;gap:8px;
+  -webkit-tap-highlight-color:rgba(196,98,45,.15);
+  touch-action:manipulation;
+  user-select:none;
 }
 .ctx-card::before{
   content:'';position:absolute;top:0;left:0;right:0;height:2px;
@@ -1052,10 +1046,9 @@ footer.unrlvl-footer {
 
 /* ── MOBILE CONTEXT SWITCHER ─────────────────────────────────────────── */
 .mob-switcher{
+  position:fixed;bottom:0;left:0;right:0;z-index:100;
   display:flex;flex-direction:column;
   padding-bottom:env(safe-area-inset-bottom);
-  flex-shrink:0;
-  z-index:10;
 }
 .mob-sw-handle{
   display:flex;align-items:center;justify-content:center;
@@ -1308,13 +1301,7 @@ footer.unrlvl-footer {
     <!-- ══ TAB: CONSULTA (existente) ════════════════════════════════════ -->
     <div class="tab-panel active" id="panel-consulta">
     <div class="chat-header">
-      <button class="home-btn" onclick="goHome()" title="Volver al inicio">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
-          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-          <polyline points="9 22 9 12 15 12 15 22"/>
-        </svg>
-      </button>
+
       <div class="header-title">La <em>Ley 284</em> explicada en lenguaje humano</div>
       <div class="online"><span class="online-dot"></span>Activo</div>
     </div>
@@ -1495,9 +1482,11 @@ async function initSession(){
 //    ENTER   called when user clicks CTA                                    
 async function enterApp(){
   const btn = document.getElementById('cta-btn');
-  btn.style.opacity = '.6';
-  btn.style.pointerEvents = 'none';
-  btn.innerHTML = 'Cargando<span class="s-arrow"> </span>';
+  if(btn){
+    btn.style.opacity = '.6';
+    btn.style.pointerEvents = 'none';
+    btn.innerHTML = 'Cargando<span class="s-arrow"> </span>';
+  }
 
   // Wait if session not ready yet (usually it is   parallel)
   if(!sessionReady){
@@ -2154,14 +2143,13 @@ function chooseContext(tab) {
     sel.style.opacity = '0';
     setTimeout(() => { sel.style.display = 'none'; }, 300);
   }
-  // enterApp primero (muestra el app), luego switchTab para asegurar panel correcto
+  // Asegurar tab activo ANTES de enterApp
+  switchTab(tab);
   enterApp();
-  // switchTab después de que el app esté visible
   setTimeout(() => {
-    switchTab(tab);
     if (window.innerWidth <= 700) showMobSwitcher(tab);
     if (tab === 'propietario' && !isUnlimited) openAuthMini();
-  }, 620);
+  }, 700);
 }
 
 // ══ TABS COLAPSABLE ═══════════════════════════════════════════════════════
