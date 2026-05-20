@@ -231,9 +231,10 @@ html,body{height:100%;background:var(--void);color:var(--chalk);font-family:var(
 
 /* RESPONSIVE */
 @media(max-width:700px){
-  #app{grid-template-columns:1fr;display:flex;flex-direction:column;height:100dvh;}
+  #app{grid-template-columns:1fr;display:flex;flex-direction:column;height:100dvh;overflow:hidden;}
   .side{display:none;}
-  /* Chat header fixed at top */
+  .main{flex:1;overflow:hidden;}
+  /* Chat header */
   .chat-header{
     position:fixed;top:0;left:0;right:0;z-index:50;
     padding:12px 16px;
@@ -241,16 +242,10 @@ html,body{height:100%;background:var(--void);color:var(--chalk);font-family:var(
   /* Messages scroll area - padded for fixed header+footer */
   .messages{
     padding:16px 14px;gap:18px;
-    padding-top:64px;   /* header height */
-    padding-bottom:130px; /* input + footer height */
+    padding-top:8px;
+    padding-bottom:8px;
   }
-  /* Input area fixed at bottom */
-  .input-area{
-    position:fixed;bottom:34px;left:0;right:0;z-index:50;
-    padding:10px 14px 10px;
-    padding-bottom:max(10px, env(safe-area-inset-bottom));
-    background:transparent;
-  }
+  /* input-area: static in mobile flex layout */
   .input-field{font-size:16px;min-height:46px;padding:11px 14px;}
   .send-btn{width:46px;height:46px;flex-shrink:0;}
   .input-row{gap:8px;align-items:flex-end;}
@@ -1051,9 +1046,10 @@ footer.unrlvl-footer {
 
 /* ── MOBILE CONTEXT SWITCHER ─────────────────────────────────────────── */
 .mob-switcher{
-  position:fixed;bottom:0;left:0;right:0;z-index:100;
   display:flex;flex-direction:column;
   padding-bottom:env(safe-area-inset-bottom);
+  flex-shrink:0;
+  z-index:10;
 }
 .mob-sw-handle{
   display:flex;align-items:center;justify-content:center;
@@ -1112,14 +1108,52 @@ footer.unrlvl-footer {
 .drawer-trigger.hidden{opacity:0;pointer-events:none;}
 
 @media(max-width:700px){
-  /* Input sobre el switcher */
-  .messages{padding-bottom:210px !important;}
-  .input-area{bottom:84px !important;}
+  /* Quitar fixed del input — fluye con el flex container */
+  .input-area{
+    position:static !important;
+    bottom:auto !important;
+    padding:10px 14px 10px;
+    padding-bottom:max(10px, env(safe-area-inset-bottom));
+    background:rgba(10,9,12,.98);
+    border-top:1px solid rgba(249,248,255,.06);
+    flex-shrink:0;
+    z-index:auto;
+  }
+  /* El panel consulta ocupa toda la altura disponible */
+  #panel-consulta{
+    height:100%;
+    display:flex;
+    flex-direction:column;
+  }
+  /* Messages: flex:1 para ocupar el espacio disponible */
+  .messages{
+    flex:1 !important;
+    overflow-y:auto !important;
+    padding:12px 14px !important;
+    padding-bottom:8px !important;
+  }
+  /* Chat header: static también */
+  .chat-header{
+    position:static !important;
+    flex-shrink:0;
+  }
+  /* Hints line */
+  .input-hints{position:static !important;padding:2px 14px 6px;}
   /* FAQ trigger más arriba en mobile */
   .drawer-trigger{
-    bottom:160px;top:auto;transform:none;right:0;
+    bottom:100px;top:auto;transform:none;right:0;
     padding:14px 9px;
   }
+}
+
+.mob-sw-arrow-wrap{
+  width:36px;height:36px;border-radius:50%;
+  background:rgba(196,98,45,.12);border:1.5px solid rgba(196,98,45,.35);
+  display:flex;align-items:center;justify-content:center;
+  transition:all .2s;
+}
+.mob-sw-handle:hover .mob-sw-arrow-wrap{
+  background:rgba(196,98,45,.22);border-color:rgba(196,98,45,.6);
 }
 </style>
 </head>
@@ -2040,11 +2074,28 @@ async function authConfirmOtp() {
 
 // Volver al splash
 function goHome(){
+  // Ocultar app
+  const app = document.getElementById('app');
+  if(app){ app.classList.remove('show'); app.style.display='none'; }
+  // Ocultar mob switcher
+  const sw = document.getElementById('mob-switcher');
+  if(sw) sw.style.display='none';
+  // Restaurar splash por si quedó "out"
   const splash = document.getElementById('splash');
-  if(splash){
-    splash.style.opacity='0';
-    splash.style.display='flex';
-    setTimeout(()=>{splash.style.opacity='1';},10);
+  if(splash){ splash.classList.remove('out'); splash.style.display='flex'; }
+  // Restaurar CTA por si quedó "Cargando"
+  const btn = document.getElementById('cta-btn');
+  if(btn){
+    btn.style.opacity='1';
+    btn.style.pointerEvents='auto';
+    btn.innerHTML='Comenzar <span class="s-arrow">&#x2192;</span>';
+  }
+  // Mostrar selector
+  const sel = document.getElementById('ctx-selector');
+  if(sel){
+    sel.style.display='flex';
+    sel.style.opacity='0';
+    requestAnimationFrame(()=>{ sel.style.transition='opacity .3s ease'; sel.style.opacity='1'; });
   }
 }
 
@@ -2221,10 +2272,12 @@ function switchMobContext(tab) {
 <!-- ══ MOBILE CONTEXT SWITCHER (reemplaza tab bar) ══════════════════════ -->
 <div class="mob-switcher" id="mob-switcher" style="display:none">
   <div class="mob-sw-handle" id="mob-sw-handle" onclick="toggleMobSwitcher()">
-    <svg id="mob-sw-arrow" width="22" height="22" viewBox="0 0 24 24" fill="none"
-      stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
-      <polyline points="18 15 12 9 6 15"/>
-    </svg>
+    <div class="mob-sw-arrow-wrap">
+      <svg id="mob-sw-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none"
+        stroke="#C4622D" stroke-width="3" stroke-linecap="round">
+        <polyline points="18 15 12 9 6 15"/>
+      </svg>
+    </div>
   </div>
   <div class="mob-sw-panel" id="mob-sw-panel">
     <!-- Solo muestra el tab opuesto — se rellena via JS -->
