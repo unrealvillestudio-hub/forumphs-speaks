@@ -1990,22 +1990,27 @@ function renderAuthStep(step, data = {}) {
   }
 
   if (step === 'success') {
-    const unitStr = data.unit ? `   Unidad ${data.unit}` : '';
+    const building = (data.building && data.building !== 'Dev') ? data.building : 'ForumPHs';
+    const unitStr = data.unit ? ` (Unidad ${data.unit})` : '';
     box.innerHTML = `
-      <div style="text-align:center;padding:8px 0">
-        <div style="font-size:44px;margin-bottom:16px">[ok]</div>
-        <div style="font-family:'EB Garamond',serif;font-size:22px;color:var(--parch);margin-bottom:8px">${data.name}</div>
-        <div style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--terra);background:rgba(196,98,45,.12);border:1px solid rgba(196,98,45,.3);padding:5px 16px;display:inline-block;margin-bottom:12px">Propietario verificado</div>
-        <div style="font-size:13px;color:var(--dim);margin-bottom:20px">${data.building || 'ForumPHs'}${unitStr}</div>
-        <div style="font-size:13px;color:var(--dim);margin-bottom:24px;line-height:1.6">
-          Acceso ilimitado activado. Sus consultas ahora incluyen el contexto de su edificio.
+      <div style="padding:4px 0">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+          <span style="font-size:24px">[ok]</span>
+          <div>
+            <div style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:.18em;text-transform:uppercase;color:var(--terra)">Propietario verificado</div>
+            <div style="font-family:'EB Garamond',serif;font-size:18px;color:var(--parch)">${data.name}</div>
+          </div>
         </div>
-        <button class="owner-btn" style="width:100%" onclick="closeAuthMini()">Comenzar a consultar  </button>
+        <div style="font-family:var(--fn);font-size:13px;color:var(--c72);line-height:1.8;margin-bottom:20px;padding:16px;background:rgba(196,98,45,.06);border-left:2px solid var(--terra)">
+          Hola, <strong>${data.name}</strong>, bienvenido a <strong>ForumPHs Speaks</strong>.<br><br>
+          Usted cuenta con un <strong style="color:var(--terra)">Golden Pass</strong> para realizar todas las consultas que requiera sin l&iacute;mites, por ser propietario de <strong>${building}</strong>${unitStr}.<br><br>
+          Soy su asistente especializado en la <strong>Ley 284 de 2022</strong>, supervisado por <strong>Ivette Flores</strong>, Abogada y Gerente General de ForumPHs. Estoy aqu&iacute; para ayudarle cuando lo necesite.
+        </div>
+        <button class="owner-btn" style="width:100%" onclick="goToChat()">Comenzar a consultar &#x2192;</button>
       </div>
     `;
-    // Mostrar link en sidebar para futuras sesiones
     const sidebarLink = document.getElementById('auth-link-sidebar');
-    if (sidebarLink) sidebarLink.style.display = 'none'; // ya autenticado
+    if (sidebarLink) sidebarLink.style.display = 'none';
   }
 }
 
@@ -2281,6 +2286,34 @@ function switchMobContext(tab) {
   // si propietario y no autenticado
   if (tab === 'propietario' && !isUnlimited) {
     setTimeout(() => openAuthMini(), 300);
+  }
+}
+
+
+// Ir al chat tras autenticación — cierra modal, cambia a tab consulta
+function goToChat() {
+  closeAuthMini();
+  switchTab('consulta');
+  if (window.innerWidth <= 700) showMobSwitcher('consulta');
+  // Si el onboarding ya corrió, agregar mensaje corto de bienvenida
+  const msgs = document.getElementById('messages');
+  if (msgs && onboardingDone && ownerContext) {
+    const _dn = ownerContext.name || userName || '';
+    const wrap = document.createElement('div');
+    wrap.className = 'msg agent';
+    wrap.innerHTML = `<div class="msg-role">ForumPHs Speaks</div>
+      <div class="name-bubble">
+        <div style="font-family:var(--fn);font-size:14px;color:var(--c72);line-height:1.7">
+          &iquest;En qu&eacute; le puedo ayudar hoy, <strong style="color:var(--chalk)">${_dn}</strong>?
+        </div>
+      </div>`;
+    msgs.appendChild(wrap);
+    msgs.scrollTop = msgs.scrollHeight;
+  } else if (!onboardingDone) {
+    // Primera vez en el chat — startOnboarding mostrará bienvenida corta
+    // porque ya vio la larga en el modal
+    localStorage.setItem('fphs_owner_welcomed', '1');
+    startOnboarding();
   }
 }
 
