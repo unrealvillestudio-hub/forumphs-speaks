@@ -55,28 +55,60 @@ function extractArticles(text: string): string[] {
   return [...refs];
 }
 
-// ── COST LAYER: fire-and-forget token logging ─────────────────────────────────
-function logTokens(
-  brandId: string,
-  lab: string,
-  modelId: string,
-  inputTokens: number,
-  outputTokens: number,
-  notes?: string
-) {
-  fetch(`${SB_URL}/rest/v1/ops_token_sessions`, {
-    method: 'POST',
-    headers: dbH(),
-    body: JSON.stringify({
-      session_type: 'agent_call',
-      model_id: modelId,
-      brand_id: brandId,
-      lab: lab,
-      input_tokens: inputTokens || 0,
-      output_tokens: outputTokens || 0,
-      notes: notes,
-    }),
-  }).catch(() => { /* non-blocking */ });
+// ── COST LAYER (T5 §5.2 + §5.3) ──────────────────────────────────────────────
+// Registra el consumo real en ops_generation_ledger vía la RPC ops_log_generation.
+// Reemplaza los dos inserts zombis a ops_token_sessions (tabla retirada; el
+// fetch(...).catch(()=>{}) fire-and-forget dejó cada respuesta sin registrar).
+// fphs-chat quema hasta 3 llamadas por respuesta (main + QA + corrección): se
+// suman en UNA fila combinada. lab='speaks', source_app='fphs-chat'.
+//
+// §5.3 — fail LOUD: se await el insert y todo fallo se loguea con status + body.
+// No lanza al path del usuario.
+async function logLedger(
+  inputUnits: number,
+  outputUnits: number,
+  durationMs: number,
+): Promise<void> {
+  if (!SB_URL || !SB_KEY) {
+    console.error('[fphs-chat] SUPABASE_URL/SERVICE_ROLE_KEY ausentes; no se puede escribir al ledger.');
+    return;
+  }
+  if (inputUnits === 0 && outputUnits === 0) return;
+  try {
+    const res = await fetch(`${SB_URL}/rest/v1/rpc/ops_log_generation`, {
+      method: 'POST',
+      headers: {
+        'apikey': SB_KEY,
+        'Authorization': `Bearer ${SB_KEY}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        p_lab: 'speaks',
+        p_brand_id: 'ForumPHs',
+        p_job_id: null,
+        p_piece_id: null,
+        p_output_type: 'speaks_chat',
+        p_platform: null,
+        p_provider: 'anthropic',
+        p_model_id: 'claude-sonnet-5',
+        p_unit_type: 'tokens_in', // fila combinada; la RPC resuelve in + out
+        p_input_units: inputUnits,
+        p_output_units: outputUnits,
+        // rates NULL → ops_log_generation resuelve desde ops_lab_rates por model_id.
+        p_status: 'success',
+        p_duration_ms: durationMs,
+        p_agent_name: 'fphs-chat',
+        p_source_app: 'fphs-chat',
+        p_api_key_ref: 'ANTHROPIC_API_KEY',
+      }),
+    });
+    if (!res.ok) {
+      const bodyText = await res.text().catch(() => '(unreadable body)');
+      console.error(`[fphs-chat] ledger insert failed: HTTP ${res.status} — ${bodyText}`);
+    }
+  } catch (err) {
+    console.error('[fphs-chat] ledger network error:', err);
+  }
 }
 
 // Returns { text, usage } — usage needed for cost logging
@@ -204,6 +236,7 @@ CORREGIR: [descripción concisa del error]
 CORRECCION: [texto correcto para reemplazar la parte errónea]`;
 
 Deno.serve(async (req) => {
+  const startedAt = Date.now();
   if (req.method === 'OPTIONS') return new Response(null, { headers: cors });
   if (req.method !== 'POST') return new Response('Method not allowed', { status: 405, headers: cors });
 
@@ -243,13 +276,17 @@ Deno.serve(async (req) => {
     const mainResult = await callClaude(systemFinal, msgs);
     let reply = mainResult.text;
 
-    // Log main call tokens (fire-and-forget)
-    logTokens('ForumPHs', 'speaks-agent', 'claude-sonnet-4-6',
-      mainResult.usage.input_tokens, mainResult.usage.output_tokens, 'fphs-chat-main');
+    // Acumula el consumo de TODAS las llamadas de esta respuesta (main + QA +
+    // corrección) para una sola fila combinada en el ledger.
+    let totalInputTokens = mainResult.usage.input_tokens || 0;
+    let totalOutputTokens = mainResult.usage.output_tokens || 0;
 
     let qaPassed = true;
     try {
       const qaResult = await callClaude(QA_SYSTEM, [{ role: 'user', content: `Respuesta a revisar:\n\n${reply}` }], 520);
+      // La llamada QA siempre consume tokens: se cuenta corra o no corra la corrección.
+      totalInputTokens += qaResult.usage.input_tokens || 0;
+      totalOutputTokens += qaResult.usage.output_tokens || 0;
       qaPassed = qaResult.text.startsWith('APROBADO');
       if (!qaPassed) {
         const correctionMatch = qaResult.text.match(/CORRECCI[OÓ]N:\s*(.+)/s);
@@ -262,10 +299,8 @@ Deno.serve(async (req) => {
           { role: 'user', content: `Tu respuesta anterior contiene un error: ${errorDesc}. ${correction ? `La información correcta es: ${correction}` : ''} Por favor corrige tu respuesta completa.` },
         ]);
         reply = corrResult.text;
-        // Log QA correction tokens (fire-and-forget)
-        logTokens('ForumPHs', 'speaks-agent-qa', 'claude-sonnet-4-6',
-          qaResult.usage.input_tokens + corrResult.usage.input_tokens,
-          qaResult.usage.output_tokens + corrResult.usage.output_tokens, 'fphs-chat-qa-correction');
+        totalInputTokens += corrResult.usage.input_tokens || 0;
+        totalOutputTokens += corrResult.usage.output_tokens || 0;
       }
     } catch { qaPassed = true; }
 
@@ -281,6 +316,10 @@ Deno.serve(async (req) => {
     await dbPatch('speaks_sessions', `id=eq.${session.id}`, {
       questions_used: newCount, last_active_at: new Date().toISOString(),
     });
+
+    // §5.4 fiabilidad — await el ledger antes de responder, para que la fila
+    // quede committeada antes de que el isolate pueda reclamarse.
+    await logLedger(totalInputTokens, totalOutputTokens, Date.now() - startedAt);
 
     return respond({
       reply, questions_used: newCount,
