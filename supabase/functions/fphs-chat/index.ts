@@ -83,15 +83,18 @@ function logTokens(
 async function callClaude(
   system: string,
   messages: {role:string;content:string}[],
-  maxTokens = 1000
+  maxTokens = 1300 // PR-C §5 — Sonnet 5: +30% sobre el 1000 anterior (nuevo tokenizer)
 ): Promise<{ text: string; usage: { input_tokens: number; output_tokens: number } }> {
   const r = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
     headers: { 'Content-Type':'application/json', 'x-api-key':ANTHROPIC_KEY, 'anthropic-version':'2023-06-01' },
-    body: JSON.stringify({ model:'claude-sonnet-4-6', max_tokens:maxTokens, system, messages }),
+    // PR-C §5 — Sonnet 5. thinking disabled (conversacional determinista; mantiene
+    // los thinking tokens fuera de max_tokens). Sin temperature/top_p/top_k: el
+    // endpoint de Sonnet 5 los rechaza (incluso temperature: 0 da HTTP 400).
+    body: JSON.stringify({ model:'claude-sonnet-5', thinking:{ type:'disabled' }, max_tokens:maxTokens, system, messages }),
   });
   const d = await r.json();
-  if (!r.ok) throw new Error(labelClaudeError(r.status, d, "claude-sonnet-4-6"));
+  if (!r.ok) throw new Error(labelClaudeError(r.status, d, "claude-sonnet-5"));
   if (d.error) throw new Error(d.error.message ?? JSON.stringify(d.error));
   return {
     text: d.content?.[0]?.text ?? '',
@@ -246,7 +249,7 @@ Deno.serve(async (req) => {
 
     let qaPassed = true;
     try {
-      const qaResult = await callClaude(QA_SYSTEM, [{ role: 'user', content: `Respuesta a revisar:\n\n${reply}` }], 400);
+      const qaResult = await callClaude(QA_SYSTEM, [{ role: 'user', content: `Respuesta a revisar:\n\n${reply}` }], 520);
       qaPassed = qaResult.text.startsWith('APROBADO');
       if (!qaPassed) {
         const correctionMatch = qaResult.text.match(/CORRECCI[OÓ]N:\s*(.+)/s);
