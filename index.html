@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>ForumPHs Speaks — Consulta sobre Propiedad Horizontal</title>
-<meta name="description" content="Consulte sus derechos y obligaciones según la Ley vigente de Régimen de Propiedad Horizontal de Panamá, en lenguaje claro. Supervisado por Ivette Flores, Abogada y Gerente General de ForumPHs.">
+<meta name="description" content="Consulte sus derechos y obligaciones según la Ley vigente de Régimen de Propiedad Horizontal de Panamá, en lenguaje claro. Supervisado y gestionado con criterio jurídico por ForumPHs.">
 <meta name="theme-color" content="#0E1018">
 <link rel="icon" type="image/png" href="/assets/icon.png">
 <link rel="apple-touch-icon" href="/assets/icon.png">
@@ -158,11 +158,26 @@ button { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
   background: linear-gradient(100deg, #E0864F 0%, #C4622D 34%, #EAD9F5 100%);
   -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
 }
+/* Logotipo compacto «ForumPHs Speaks»: acompaña al usuario en el selector, en el chat y en el
+   espacio de propietarios, como el de la portada. */
+.speaks-lockup { display: inline-flex; align-items: baseline; gap: 7px; white-space: nowrap; line-height: 1; }
+.speaks-lockup .wm .f, .speaks-lockup .wm .ph, .speaks-lockup .wm .s { font-size: 22px; }
+.lk-speaks {
+  font-family: var(--fs); font-size: 23px; font-style: italic; font-weight: 500; letter-spacing: 0.02em;
+  background: linear-gradient(100deg, #E0864F 0%, #C4622D 34%, #EAD9F5 100%);
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+}
+.app-bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 4px 12px; padding: 12px 14px 4px; background: var(--carbon-d); flex-shrink: 0; }
+.app-bar .speaks-lockup .wm .f, .app-bar .speaks-lockup .wm .ph, .app-bar .speaks-lockup .wm .s { font-size: 19px; }
+.app-bar .lk-speaks { font-size: 20px; }
+.app-bar-tag { margin-left: auto; min-width: 0; font-family: var(--fd); font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-3); text-align: right; }
+.ctx-lockup { margin-bottom: 26px; }
 .s-speaks::after { content: ''; display: block; height: 1.5px; margin-top: 6px; border-radius: 1px; background: linear-gradient(90deg, var(--terra) 0%, var(--am-m) 60%, transparent 100%); }
 .s-headline { font-family: var(--fs); font-size: clamp(1.6rem, 6.4vw, 2.7rem); font-weight: 500; line-height: 1.18; color: var(--text); max-width: 34rem; margin-bottom: 16px; overflow-wrap: break-word; }
 .s-headline em { font-style: italic; color: var(--am-l); }
 .s-sub { font-size: 15.5px; font-weight: 300; line-height: 1.7; color: var(--text-2); max-width: 32rem; margin-bottom: 32px; }
 .s-cta { min-width: min(260px, 100%); min-height: 54px; padding: 15px 30px; font-size: 16px; letter-spacing: 0.04em; }
+.s-disclaimer strong, .ctx-disclaimer strong { display: block; margin-bottom: 4px; font-weight: 600; color: var(--text-2); }
 .s-disclaimer { margin-top: 26px; max-width: 30rem; padding: 10px 14px; border: 1px solid var(--line); border-radius: 10px; font-size: 12px; line-height: 1.6; color: var(--text-3); }
 .splash-band { margin-top: auto; }
 
@@ -227,7 +242,8 @@ button { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
 }
 .t-chip { width: 30px; height: 30px; flex-shrink: 0; border-radius: 8px; display: flex; align-items: center; justify-content: center; background: rgba(240,237,232,0.05); border: 1px solid var(--line-2); }
 .t-body { display: flex; flex-direction: column; gap: 2px; min-width: 0; flex: 1; }
-.t-label { font-family: var(--fd); font-size: 10.5px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* El rótulo parte en dos líneas antes que cortarse: «Solo propietarios» tiene que leerse entero. */
+.t-label { font-family: var(--fd); font-size: 10.5px; font-weight: 600; letter-spacing: 0.1em; line-height: 1.25; text-transform: uppercase; color: var(--text-3); }
 .t-sub { display: none; font-size: 11px; color: var(--text-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .t-badge { display: none; }
 .t-long { display: none; }
@@ -319,6 +335,7 @@ button { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
 .send-btn:active { transform: translateY(1px) scale(0.96); box-shadow: inset 0 2px 6px rgba(0,0,0,0.35); }
 .send-btn:disabled { cursor: not-allowed; opacity: 0.45; background: var(--surface); border-color: var(--line); box-shadow: none; transform: none; }
 @media (hover: hover) and (pointer: fine) { .send-btn:hover:not(:disabled) { transform: translateY(-1px); box-shadow: inset 0 1px 0 rgba(255,255,255,0.36), 0 12px 24px -8px rgba(224,134,79,0.95); } }
+.input-disclaimer { margin-top: 2px; font-size: 10.5px; color: var(--text-3); opacity: 0.85; text-align: center; }
 .input-note { margin-top: 6px; font-size: 11.5px; color: var(--text-3); text-align: center; }
 
 /* Preguntas frecuentes: hoja que sube desde abajo en el teléfono, panel lateral en escritorio. */
@@ -341,7 +358,9 @@ button { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
 .drawer-title { font-family: var(--fd); font-size: 10.5px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--am-l); }
 .drawer-close { width: 44px; height: 44px; margin-right: -10px; display: flex; align-items: center; justify-content: center; background: none; border: 0; color: var(--text-3); cursor: pointer; }
 .drawer-items { display: flex; flex-direction: column; overflow-y: auto; flex: 1; padding: 6px 0; }
-.drawer-item { position: relative; min-height: 52px; padding: 14px 20px; background: none; border: 0; border-bottom: 1px solid var(--line-2); text-align: left; font-size: 14.5px; line-height: 1.5; color: var(--text-2); cursor: pointer; transition: background 0.18s, color 0.18s, padding 0.18s; }
+/* flex-shrink:0 — en una columna con altura limitada, los botones se encogían por debajo de su
+   texto y la última línea de uno quedaba debajo del siguiente. Ahora la lista se desplaza. */
+.drawer-item { flex-shrink: 0; position: relative; min-height: 52px; padding: 14px 20px; background: none; border: 0; border-bottom: 1px solid var(--line-2); text-align: left; font-size: 14.5px; line-height: 1.5; color: var(--text-2); cursor: pointer; transition: background 0.18s, color 0.18s, padding 0.18s; }
 .drawer-item::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; background: var(--terra); transform: scaleY(0); transition: transform 0.18s; }
 .drawer-item:active, .drawer-item:focus-visible { background: rgba(196,98,45,0.10); color: var(--text); }
 .drawer-item:last-child { border-bottom: 0; }
@@ -411,20 +430,22 @@ button { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
    esa función sin tapar el campo de escritura. Los elementos quedan para no romper el script. */
 .mob-switcher, .mob-chips { display: none !important; }
 
-/* ══ PIE ESTÁNDAR UNRLVL — BP_BRAND_UNRLVL_v1.5 → footer ═════════════════════════════ */
-@keyframes chev-sig { 0%, 45% { opacity: 1; } 50%, 92% { opacity: 0; } 97%, 100% { opacity: 1; } }
-footer.unrlvl-footer { display: none; }
-.unrlvl-band { background: #0F0F0F; border-top: 2px solid #00FFD1; padding: 12px 20px; display: grid; grid-template-columns: 1fr; gap: 4px; align-items: center; text-align: center; }
-.fp-col-left, .fp-col-center, .fp-col-right { display: flex; flex-direction: column; align-items: center; gap: 3px; }
-.fp-col-center, .fp-addr { display: none; }
-.fp-client-wm { font-family: var(--fs); font-size: 15px; color: #F2F0EC; line-height: 1; }
-.fp-client-wm .wm-ph { font-family: var(--fn); font-weight: 700; letter-spacing: 0.05em; color: var(--terra); }
-.fp-client-desc, .fp-rights, .fp-addr { font-family: 'Space Mono', monospace; font-size: 8px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(242,240,236,0.45); }
-.fp-sig-line { display: flex; align-items: baseline; flex-wrap: wrap; justify-content: center; line-height: 1; }
-.fp-sig-by { margin-right: 5px; font-family: 'Space Mono', monospace; font-size: 8px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(242,240,236,0.45); }
-.fp-sig-name { font-family: 'Bebas Neue', sans-serif; font-size: 15px; letter-spacing: 0.06em; color: rgba(242,240,236,0.8); }
-.fp-sig-chev { font-family: 'Bebas Neue', sans-serif; font-size: 15px; color: #00FFD1; display: inline-block; animation: chev-sig 0.9s ease-in-out infinite; }
-.fp-sig-studio { margin-left: 5px; font-family: 'Bebas Neue', sans-serif; font-size: 10px; letter-spacing: 0.24em; color: rgba(242,240,236,0.4); }
+/* ══ PIE ESTÁNDAR UNRLVL — BP_BRAND_UNRLVL_v1.5 → footer, idéntico al de forumphs.com: fondo
+   #0F0F0F, borde superior 2 px #00FFD1 y tres columnas — logo del CLIENTE · derechos · firma del
+   estudio. Son colores del estudio, no de la marca: viven sólo en esta banda. ══════════════ */
+.unrlvl-band { background: #0F0F0F; border-top: 2px solid #00FFD1; padding: 22px 20px calc(22px + env(safe-area-inset-bottom)); }
+.unrlvl-grid { display: grid; gap: 14px; justify-items: center; text-align: center; max-width: 1180px; margin: 0 auto; }
+.unrlvl-band .wm-sm .f, .unrlvl-band .wm-sm .ph, .unrlvl-band .wm-sm .s { font-size: 20px; }
+.unrlvl-rights { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.06em; line-height: 1.7; color: rgba(242,240,236,0.55); }
+@keyframes prompt-blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
+.credit-kicker { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(242,240,236,0.45); }
+.lt-logotype { font-family: 'Bebas Neue', sans-serif; font-size: 26px; letter-spacing: 0.04em; line-height: 1; white-space: nowrap; }
+.lt-un, .lt-ille { color: #F2F0EC; }
+.lt-chevron { color: #00FFD1; animation: prompt-blink 1.1s step-end infinite; display: inline-block; transform: scaleY(1.45) scaleX(0.72); letter-spacing: 0; margin: 0 -0.01em; }
+.lt-studio { color: rgba(242,240,236,0.4); font-size: 0.72em; letter-spacing: 0.14em; margin-left: 0.18em; }
+.credit-url { font-family: 'Space Mono', monospace; font-size: 9px; letter-spacing: 0.06em; color: rgba(242,240,236,0.4); }
+.credit a { text-decoration: none; }
+.chat-band { display: none; }
 
 /* ══ Desde 420 px ═════════════════════════════════════════════════════════════════════ */
 @media (min-width: 420px) {
@@ -443,7 +464,7 @@ footer.unrlvl-footer { display: none; }
   .side::-webkit-scrollbar { width: 3px; } .side::-webkit-scrollbar-thumb { background: var(--am-m); }
   .side-header { padding: 26px 22px 20px; border-bottom: 1px solid var(--line-2); }
   .eyebrow { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; font-family: var(--fd); font-size: 9px; letter-spacing: 0.26em; text-transform: uppercase; color: var(--am-l); }
-  .brand-speaks { margin-top: 4px; font-family: var(--fs); font-size: 16px; font-style: italic; color: var(--am-l); }
+  .app-bar { display: none; }
   .session-block { padding: 18px 22px; border-bottom: 1px solid var(--line-2); }
   .block-label { display: block; margin-bottom: 10px; font-family: var(--fd); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-3); }
   .dots-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
@@ -488,17 +509,11 @@ footer.unrlvl-footer { display: none; }
   .owner-panel { padding: 48px 32px; }
   .modal, .auth-mini-box { padding: 40px 36px; }
 
-  footer.unrlvl-footer { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; align-items: center; padding: 12px 28px; background: #0F0F0F; border-top: 2px solid #00FFD1; flex-shrink: 0; }
-  footer.unrlvl-footer .fp-col-left { align-items: flex-start; }
-  footer.unrlvl-footer .fp-col-center { display: flex; align-items: center; }
-  footer.unrlvl-footer .fp-col-right { align-items: flex-end; }
-  footer.unrlvl-footer .fp-addr { display: block; }
-  footer.unrlvl-footer .fp-sig-line { justify-content: flex-end; }
-  .unrlvl-band { grid-template-columns: 1fr 1fr 1fr; text-align: left; padding: 12px 28px; }
-  .unrlvl-band .fp-col-left { align-items: flex-start; }
-  .unrlvl-band .fp-col-center { display: flex; }
-  .unrlvl-band .fp-col-right { align-items: flex-end; }
-  .unrlvl-band .fp-sig-line { justify-content: flex-end; }
+  .unrlvl-grid { grid-template-columns: 1fr 1.4fr 1fr; align-items: center; }
+  .unrlvl-grid > :first-child { justify-self: start; }
+  .unrlvl-grid > :last-child { justify-self: end; text-align: right; }
+  .chat-band { display: block; flex-shrink: 0; padding: 12px 28px; }
+  .chat-band .lt-logotype { font-size: 20px; }
   .ctx-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 </style>
@@ -513,21 +528,22 @@ footer.unrlvl-footer { display: none; }
   <div class="s-brand"><div class="wm wm-lg"><span class="f">Forum</span><span class="ph">PH</span><span class="s">s</span></div></div>
   <div class="s-speaks-wrap"><div class="s-speaks">Speaks</div></div>
   <h1 class="s-headline">¿Tiene preguntas sobre la <em>Ley vigente de Régimen de Propiedad Horizontal</em>? Aquí están las respuestas.</h1>
-  <p class="s-sub">Consulte sus derechos, obligaciones y dudas sobre Propiedad Horizontal en Panamá — en lenguaje claro, supervisado por una Abogada especialista.</p>
+  <p class="s-sub">Consulte sus derechos, obligaciones y dudas sobre Propiedad Horizontal en Panamá, en lenguaje claro y con el criterio jurídico de ForumPHs.</p>
   <button class="s-cta" id="cta-btn" type="button" onclick="openSelector()">
     Comenzar <span class="s-arrow">→</span>
   </button>
-  <div class="s-disclaimer">Información general sobre la Ley vigente de Régimen de Propiedad Horizontal de Panamá. No sustituye asesoría jurídica profesional para su caso particular.</div>
+  <div class="s-disclaimer"><strong>Supervisado y gestionado con criterio jurídico por ForumPHs.</strong> ForumPHs Speaks ofrece información general: no sustituye ni representa asesoría legal. Funciona con tecnología automatizada y puede cometer errores.</div>
   </div>
-  <!-- Pie estándar UNRLVL — BP_BRAND_UNRLVL_v1.5 → footer -->
+  <!-- Pie estándar UNRLVL — BP_BRAND_UNRLVL_v1.5 → footer (el mismo de forumphs.com) -->
   <footer class="unrlvl-band splash-band">
-    <div class="fp-col-left">
-      <div class="fp-client-wm">Forum<span class="wm-ph">PHs</span></div>
-      <div class="fp-client-desc">Propiedad Horizontal · Panamá</div>
-    </div>
-    <div class="fp-col-center"><div class="fp-rights">© 2026 ForumPHs — ForumPHs Speaks</div></div>
-    <div class="fp-col-right">
-      <div class="fp-sig-line"><span class="fp-sig-by">Designed &amp; Developed by</span><span class="fp-sig-name">Unreal</span><span class="fp-sig-chev">&gt;</span><span class="fp-sig-name">ille</span><span class="fp-sig-studio">Studio</span></div>
+    <div class="unrlvl-grid">
+      <span class="wm wm-sm" role="img" aria-label="ForumPHs"><span class="f">Forum</span><span class="ph">PH</span><span class="s">s</span></span>
+      <span class="unrlvl-rights">© 2026 ForumPHs — ForumPHs Speaks · Consulta sobre Propiedad Horizontal · Panamá</span>
+      <div class="credit">
+        <span class="credit-kicker">Designed &amp; Developed by</span><br>
+        <a href="https://unrealvillestudio.com" target="_blank" rel="noopener" aria-label="Unrealville Studio"><span class="lt-logotype"><span class="lt-chevron">&gt;</span><span class="lt-un">UNREAL</span><span class="lt-ille">VILLE</span><span class="lt-studio">studio</span></span></a><br>
+        <span class="credit-url">unrealvillestudio.com · North Miami, FL 33181</span>
+      </div>
     </div>
   </footer>
 </div>
@@ -536,9 +552,7 @@ footer.unrlvl-footer { display: none; }
 <!-- ══ CONTEXT SELECTOR ════════════════════════════════════════════════ -->
 <div id="ctx-selector" style="display:none">
   <div class="ctx-inner">
-  <div class="ctx-eyebrow">
-    <span class="ctx-dot"></span>ForumPHs Speaks
-  </div>
+  <div class="ctx-lockup"><span class="speaks-lockup" role="img" aria-label="ForumPHs Speaks"><span class="wm"><span class="f">Forum</span><span class="ph">PH</span><span class="s">s</span></span><span class="lk-speaks">Speaks</span></span></div>
   <h1 class="ctx-headline">¿Cómo podemos<br><em>ayudarle hoy?</em></h1>
 
   <div class="ctx-cards">
@@ -549,7 +563,7 @@ footer.unrlvl-footer { display: none; }
           <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
         </svg>
       </span>
-      <span class="ctx-card-label">Consulta legal</span>
+      <span class="ctx-card-label">Consulta legal pública</span>
       <span class="ctx-card-name">Propiedad Horizontal</span>
       <span class="ctx-card-desc">Entienda sus derechos y obligaciones según la Ley vigente de Régimen de Propiedad Horizontal. Gratuito, en lenguaje claro.</span>
       <span class="ctx-card-cta">Consultar ahora <span aria-hidden="true">→</span></span>
@@ -564,14 +578,14 @@ footer.unrlvl-footer { display: none; }
           <path d="M9 12l2 2 4-4"/>
         </svg>
       </span>
-      <span class="ctx-card-label">Propietario</span>
+      <span class="ctx-card-label">Solo propietarios de PHs administrados por ForumPHs</span>
       <span class="ctx-card-name">ForumPHs</span>
       <span class="ctx-card-desc">Acceso exclusivo para propietarios. Consultas ilimitadas con contexto de su PH.</span>
       <span class="ctx-card-cta ctx-card-cta-prop">Acceder <span aria-hidden="true">→</span></span>
     </button>
   </div>
 
-  <div class="ctx-disclaimer">Supervisado por Ivette Flores · Abogada y Gerente General de ForumPHs</div>
+  <div class="ctx-disclaimer"><strong>Supervisado y gestionado con criterio jurídico por ForumPHs.</strong>ForumPHs Speaks ofrece información general: no sustituye ni representa asesoría legal. Funciona con tecnología automatizada y puede cometer errores.</div>
   </div>
 </div>
 
@@ -579,9 +593,8 @@ footer.unrlvl-footer { display: none; }
 <div id="app">
   <aside class="side">
     <div class="side-header">
-      <div class="eyebrow"><span class="s-pulse"></span>Consulta legal · Propiedad Horizontal</div>
-      <div class="wm wm-md"><span class="f">Forum</span><span class="ph">PH</span><span class="s">s</span></div>
-      <div class="brand-speaks">Speaks</div>
+      <div class="eyebrow"><span class="s-pulse"></span>Consulta legal pública</div>
+      <span class="speaks-lockup" role="img" aria-label="ForumPHs Speaks"><span class="wm"><span class="f">Forum</span><span class="ph">PH</span><span class="s">s</span></span><span class="lk-speaks">Speaks</span></span>
     </div>
     <div class="session-block">
       <span class="block-label">Sesión actual</span>
@@ -619,6 +632,11 @@ footer.unrlvl-footer { display: none; }
   </aside>
 
   <main class="main">
+    <!-- Barra del logotipo (teléfono; en escritorio el logotipo vive en la barra lateral) -->
+    <div class="app-bar">
+      <span class="speaks-lockup" role="img" aria-label="ForumPHs Speaks"><span class="wm"><span class="f">Forum</span><span class="ph">PH</span><span class="s">s</span></span><span class="lk-speaks">Speaks</span></span>
+      <span class="app-bar-tag">Ley vigente · Panamá</span>
+    </div>
 
     <!-- ══ TABS BAR ══════════════════════════════════════════════════════ -->
     <div class="tabs-bar" id="tabs-bar">
@@ -631,8 +649,8 @@ footer.unrlvl-footer { display: none; }
           </svg>
         </div>
         <div class="t-body">
-          <span class="t-label">Consulta<span class="t-long"> legal</span></span>
-          <span class="t-sub">Asistente legal gratuito</span>
+          <span class="t-label">Consulta<span class="t-long"> legal</span> pública</span>
+          <span class="t-sub">Abierta a todos · Gratuita</span>
         </div>
       </button>
       <!-- TAB: Propietarios ForumPHs -->
@@ -644,8 +662,8 @@ footer.unrlvl-footer { display: none; }
           </svg>
         </div>
         <div class="t-body">
-          <span class="t-label">Propietarios</span>
-          <span class="t-sub">Acceso exclusivo ForumPHs</span>
+          <span class="t-label">Solo propietarios</span>
+          <span class="t-sub">De PHs administrados por ForumPHs</span>
         </div>
         <span class="t-badge">Exclusivo</span>
       </button>
@@ -684,27 +702,19 @@ footer.unrlvl-footer { display: none; }
         </button>
       </div>
       </div><!-- /input-float -->
-      <div class="input-note" id="input-note">Cargando...</div>
+      <div class="input-note" id="input-note">Cargando…</div>
+      <div class="input-disclaimer">Información general, no asesoría legal · Puede contener errores</div>
     </div>
-    <!-- UNRLVL Standard Footer — BP_BRAND_UNRLVL_v1.2 — 3-column -->
-    <footer class="unrlvl-footer">
-      <!-- Col 1: Client logo + descriptor -->
-      <div class="fp-col-left">
-        <div class="fp-client-wm">Forum<span class="wm-ph">PHs</span></div>
-        <div class="fp-client-desc">Propiedad Horizontal · Panamá</div>
-      </div>
-      <!-- Col 2: Rights -->
-      <div class="fp-col-center">
-        <div class="fp-rights">© 2026 ForumPHs — ForumPHs Speaks</div>
-        <div class="fp-rights">Agente Legal · Uso Público</div>
-      </div>
-      <!-- Col 3: UNRLVL Signature -->
-      <div class="fp-col-right">
-        <div class="fp-sig-line">
-          <span class="fp-sig-by">Designed &amp; Developed by&nbsp;</span>
-          <span class="fp-sig-name">Unreal</span><span class="fp-sig-chev">&gt;</span><span class="fp-sig-name">ille</span><span class="fp-sig-studio">Studio</span>
+    <!-- Pie estándar UNRLVL — BP_BRAND_UNRLVL_v1.5 → footer (escritorio; en el teléfono no cabe en el chat) -->
+    <footer class="unrlvl-band chat-band">
+      <div class="unrlvl-grid">
+        <span class="wm wm-sm" role="img" aria-label="ForumPHs"><span class="f">Forum</span><span class="ph">PH</span><span class="s">s</span></span>
+        <span class="unrlvl-rights">© 2026 ForumPHs — ForumPHs Speaks · Consulta sobre Propiedad Horizontal · Panamá</span>
+        <div class="credit">
+          <span class="credit-kicker">Designed &amp; Developed by</span><br>
+          <a href="https://unrealvillestudio.com" target="_blank" rel="noopener" aria-label="Unrealville Studio"><span class="lt-logotype"><span class="lt-chevron">&gt;</span><span class="lt-un">UNREAL</span><span class="lt-ille">VILLE</span><span class="lt-studio">studio</span></span></a><br>
+          <span class="credit-url">unrealvillestudio.com · North Miami, FL 33181</span>
         </div>
-        <div class="fp-addr">unrealvillestudio.com &nbsp;·&nbsp; Hollywood, FL 33021</div>
       </div>
     </footer>
   
@@ -792,7 +802,7 @@ const ICON_MAIL = '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" s
 // distintos, y el botón volvía con un rótulo que no era el del inicio.
 function ownerFormHTML(){
   return `
-    <div class="owner-eyebrow">Acceso exclusivo</div>
+    <div class="owner-eyebrow">Solo propietarios</div>
     <div class="owner-seal">
       <svg width="28" height="28" viewBox="0 0 24 24" fill="none" aria-hidden="true">
         <path d="M12 2L3 7v5c0 5 4 9 9 10 5-1 9-5 9-10V7L12 2z" stroke="#EAD9F5" stroke-width="1.4" fill="rgba(234,217,245,.10)"/>
@@ -801,8 +811,8 @@ function ownerFormHTML(){
     </div>
     <div class="owner-title">Su espacio <em>privado</em></div>
     <div class="owner-sub">
-      Espacio exclusivo para propietarios con edificio administrado por ForumPHs.
-      Consultas ilimitadas con contexto de su PH, supervisadas por Ivette Flores.
+      Espacio exclusivo para propietarios de PHs administrados por ForumPHs.
+      Consultas ilimitadas con el contexto de su PH y el criterio jurídico de ForumPHs.
     </div>
     <div class="owner-form">
       <input class="owner-input" type="email" id="owner-email" autocomplete="email"
@@ -939,7 +949,7 @@ function startOnboarding(){
     bodyHtml = `<div style="font-family:var(--fn);font-size:14px;color:var(--c72);line-height:1.85;">
       Hola, <strong style="color:var(--chalk)">${esc(_dn)}</strong>, bienvenido a <strong style="color:var(--chalk)">ForumPHs Speaks</strong>.<br><br>
       Quiero que sepa que usted cuenta con un <strong style="color:#C4622D">Golden Pass</strong> para realizar todas las consultas que requiera sin l&iacute;mites, por ser propietario de <strong style="color:var(--chalk)">${esc(building)}</strong>${esc(unit)}, uno de los PHs administrados por ForumPHs.<br><br>
-      Soy su asistente especializado en la <strong style="color:var(--chalk)">Ley vigente de R&eacute;gimen de Propiedad Horizontal</strong>. Estoy aqu&iacute; para ayudarle a entender sus derechos y obligaciones como propietario, en lenguaje claro y sin tecnicismos, supervisado por <strong style="color:var(--chalk)">Ivette Flores</strong>, Abogada y Gerente General de ForumPHs.<br><br>
+      Soy su asistente especializado en la <strong style="color:var(--chalk)">Ley vigente de R&eacute;gimen de Propiedad Horizontal</strong>. Estoy aqu&iacute; para ayudarle a entender sus derechos y obligaciones como propietario, en lenguaje claro y sin tecnicismos. Soy un asistente automatizado, supervisado y gestionado con criterio jur&iacute;dico por ForumPHs: le doy informaci&oacute;n general, no asesor&iacute;a legal, y puedo equivocarme.<br><br>
       &iquest;Cu&aacute;l es su consulta hoy?
     </div>`;
     localStorage.setItem('fphs_owner_welcomed','1');
@@ -957,7 +967,7 @@ function startOnboarding(){
     bodyHtml = `<div style="font-family:var(--fn);font-size:14px;color:var(--c72);line-height:1.78;">
       ${greeting}<br><br>
       Soy un asistente especializado en la <strong style="color:var(--chalk)">Ley vigente de R&eacute;gimen de Propiedad Horizontal</strong> de Panam&aacute;. Estoy aqu&iacute; para ayudarle a entender sus derechos y obligaciones en lenguaje claro, sin tecnicismos.<br><br>
-      No soy abogado, pero he sido entrenado con la ley completa y soy supervisado por <strong style="color:var(--chalk)">Ivette Flores</strong>, Abogada y Gerente General de ForumPHs.<br><br>
+      No soy abogado: soy un asistente automatizado, supervisado y gestionado con criterio jur&iacute;dico por <strong style="color:var(--chalk)">ForumPHs</strong>. Le doy informaci&oacute;n general, no asesor&iacute;a legal, y puedo equivocarme.<br><br>
       ${!_dn ? '&iquest;C&oacute;mo deber&iacute;a llamarle?' : '&iquest;Cu&aacute;l es su primera consulta?'}
     </div>
     ${!_dn ? `<div class="name-input-row">
@@ -1133,9 +1143,9 @@ function switchTab(tab) {
   const eyebrow = document.querySelector('.side .eyebrow');
   if (eyebrow) {
     if (tab === 'propietario') {
-      eyebrow.innerHTML = '<span class="s-pulse" style="background:#5C3472"></span>Propietarios &middot; ForumPHs';
+      eyebrow.innerHTML = '<span class="s-pulse" style="background:#74499C"></span>Solo propietarios &middot; PHs administrados por ForumPHs';
     } else {
-      eyebrow.innerHTML = '<span class="s-pulse"></span>Consulta legal &middot; Propiedad Horizontal';
+      eyebrow.innerHTML = '<span class="s-pulse"></span>Consulta legal pública';
     }
   }
 }
@@ -1356,7 +1366,7 @@ function renderAuthStep(step, data = {}) {
         <div style="font-family:var(--fn);font-size:14px;color:var(--c72);line-height:1.75;margin-bottom:20px;padding:16px;border-radius:12px;background:rgba(196,98,45,.08);border-left:3px solid var(--terra)">
           Hola, <strong>${esc(data.name)}</strong>, bienvenido a <strong>ForumPHs Speaks</strong>.<br><br>
           Usted cuenta con un <strong style="color:var(--terra)">Golden Pass</strong> para realizar todas las consultas que requiera sin l&iacute;mites, por ser propietario de <strong>${esc(building)}</strong>${esc(unitStr)}.<br><br>
-          Soy su asistente especializado en la <strong>Ley vigente de R&eacute;gimen de Propiedad Horizontal</strong>, supervisado por <strong>Ivette Flores</strong>, Abogada y Gerente General de ForumPHs. Estoy aqu&iacute; para ayudarle cuando lo necesite.
+          Soy su asistente especializado en la <strong>Ley vigente de R&eacute;gimen de Propiedad Horizontal</strong>, supervisado y gestionado con criterio jur&iacute;dico por ForumPHs. Estoy aqu&iacute; para ayudarle cuando lo necesite.
         </div>
         <button class="owner-btn" type="button" onclick="goToChat()">Comenzar a consultar &#x2192;</button>
       </div>

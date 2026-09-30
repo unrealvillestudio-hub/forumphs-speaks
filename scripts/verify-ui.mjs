@@ -128,10 +128,15 @@ console.log('\n── 2 · El flujo funciona igual que antes ──');
   check('la portada nombra la ley por lo que es, no por su número', !(await page.content()).includes('284'));
   check('las tipografías salen del propio dominio', await page.evaluate(() => ![...document.styleSheets].some((s) => (s.href || '').includes('googleapis'))));
   check('Cinzel, EB Garamond y DM Sans cargadas', await page.evaluate(async () => { await document.fonts.ready; return ['Cinzel', 'EB Garamond', 'DM Sans'].every((f) => document.fonts.check(`16px "${f}"`)); }));
+  check('sin nombres ni cargos personales: firma de ForumPHs y aviso legal', !(await page.content()).includes('Ivette') && (await page.textContent('.s-disclaimer')).includes('criterio jurídico por ForumPHs') && (await page.textContent('.s-disclaimer')).includes('puede cometer errores'));
   await page.click('#cta-btn'); await page.waitForTimeout(500); await shot('2-selector');
   check('el selector se muestra', await page.isVisible('#ctx-card-consulta'));
+  check('el selector lleva el logotipo ForumPHs Speaks', await page.isVisible('#ctx-selector .speaks-lockup'));
+  check('público y exclusivo se distinguen', (await page.textContent('#ctx-card-consulta')).includes('Consulta legal pública') && (await page.textContent('#ctx-card-propietario')).includes('Solo propietarios de PHs administrados por ForumPHs'));
   await page.click('#ctx-card-consulta'); await page.waitForTimeout(1200); await shot('3-chat');
   check('el chat pide el nombre', await page.isVisible('#name-input'));
+  check('el chat lleva el logotipo ForumPHs Speaks', await page.isVisible('.app-bar .speaks-lockup'));
+  check('las pestañas se leen enteras', await page.evaluate(() => [...document.querySelectorAll('.t-label')].every((l) => l.scrollWidth <= l.clientWidth + 1)));
   const ph = await page.getAttribute('#input-field', 'placeholder');
   const phFits = await page.evaluate(() => { const f = document.getElementById('input-field'); return f.scrollHeight <= f.clientHeight + 2; });
   check('el texto de ayuda del campo cabe en una línea', phFits, ph);
@@ -150,10 +155,25 @@ console.log('\n── 2 · El flujo funciona igual que antes ──');
   check('la respuesta conserva negrita y cursiva', agentHtml.includes('<strong>Respuesta</strong>') && agentHtml.includes('<em>'));
   check('la respuesta no inyecta HTML', !agentHtml.includes('<img') && !(await page.evaluate(() => window.__xss)));
   check('la nota de consultas lleva su separador', (await page.textContent('#input-note')).includes(' · Enter para enviar'));
+  // Pantalla baja (lo que queda útil con la barra del navegador): es donde la lista no cabe y
+  // los renglones se montaban.
+  await page.setViewportSize({ width: 390, height: 520 });
   await page.click('#drawer-trigger'); await page.waitForTimeout(450); await shot('5-faq');
   check('las preguntas frecuentes se abren', await page.evaluate(() => document.getElementById('questions-drawer').classList.contains('open')));
+  const overlap = await page.evaluate(() => {
+    const items = [...document.querySelectorAll('.drawer-item')];
+    for (let i = 0; i < items.length; i++) {
+      const it = items[i];
+      if (it.scrollHeight > it.clientHeight + 1) return `renglón cortado: «${it.textContent.slice(0, 30)}»`;
+      if (i && items[i - 1].getBoundingClientRect().bottom > it.getBoundingClientRect().top + 0.5) return `montado: «${it.textContent.slice(0, 30)}»`;
+    }
+    return '';
+  });
+  check('preguntas frecuentes: ningún renglón se corta ni se monta', !overlap, overlap);
   await page.click('.drawer-close'); await page.waitForTimeout(400);
+  await page.setViewportSize({ width: 390, height: 844 });
   await page.click('#tab-propietario'); await page.waitForTimeout(400); await shot('6-propietarios');
+  check('propietarios lleva el logotipo ForumPHs Speaks', await page.isVisible('.app-bar .speaks-lockup'));
   check('un solo campo #owner-email en la página', (await page.$$('#owner-email')).length === 1);
   check('el botón del formulario tiene su rótulo', (await page.textContent('#owner-verify-btn')).trim() === 'Acceder a mi espacio');
   await page.fill('#owner-email', 'no-es-correo'); await page.click('#owner-verify-btn');

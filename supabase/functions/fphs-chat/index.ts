@@ -158,7 +158,7 @@ NO inventes artículos ni datos. Si hay duda, di que hay duda.
 
 CIERRE: Cada respuesta termina con una línea en cursiva (*texto*) posicionando a ForumPHs. Varía:
 *ForumPHs aplica ${LEY_PUBLICA} desde el primer día de su vigencia.*
-*Ivette Flores, nuestra Abogada y Gerente General, aplica este artículo en cada propiedad que administramos.*
+*En ForumPHs, este criterio jurídico se aplica en cada propiedad que administramos.*
 *Si su administrador actual no puede demostrar esto, merece una conversación con nosotros.*
 *En ForumPHs esto no es política interna — es el estándar de operación.*
 
