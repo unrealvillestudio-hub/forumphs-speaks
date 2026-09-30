@@ -213,6 +213,28 @@ button { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
 .ctx-card-prop .ctx-card-icon { background: rgba(92,52,114,0.40); border-color: rgba(234,217,245,0.22); }
 .ctx-card-label { font-family: var(--fd); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--terra-l); }
 .ctx-card-prop .ctx-card-label { color: var(--am-l); }
+/* Exclusividad: «Solo propietarios de PHs administrados por:» es lo primero que se lee en la
+   tarjeta. Recuadro en relieve Amatista, contorno con el mismo destello que los CTA y el nombre
+   de la marca justo debajo. */
+.excl-callout {
+  position: relative; isolation: isolate; overflow: hidden; align-self: flex-start; max-width: 100%;
+  display: flex !important; flex-direction: column; gap: 3px; margin: 2px 0 4px; padding: 10px 14px 11px;
+  border-radius: 12px; border: 1px solid rgba(234,217,245,0.45);
+  background: linear-gradient(180deg, #7A4DA3 0%, #5C3472 60%, #4A2A5D 100%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.28), inset 0 -2px 0 rgba(0,0,0,0.28), 0 10px 26px -10px rgba(150,96,196,0.9), 0 0 0 4px rgba(92,52,114,0.22);
+}
+.excl-callout::before {
+  content: ''; position: absolute; inset: 0; z-index: -1; border-radius: inherit; padding: 1px; pointer-events: none;
+  background: conic-gradient(from var(--glint), transparent 0deg 250deg, rgba(255,255,255,0.95) 300deg, transparent 340deg 360deg);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
+          mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+  animation: glint-spin 4s linear infinite;
+}
+.excl-top { display: flex; align-items: center; gap: 8px; color: #fff; }
+.excl-top svg { flex-shrink: 0; color: #F2C9A8; }
+.excl-main { font-family: var(--fd); font-size: 14px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: #fff; text-shadow: 0 1px 1px rgba(0,0,0,0.35), 0 0 14px rgba(234,217,245,0.45); }
+.excl-sub { font-family: var(--fs); font-size: 16px; font-style: italic; color: var(--am-l); }
+.ctx-card-prop .ctx-card-name { font-size: 26px; }
 .ctx-card-name { font-family: var(--fs); font-size: 24px; line-height: 1.15; color: var(--text); }
 .ctx-card-desc { font-size: 14px; line-height: 1.6; color: var(--text-2); }
 .ctx-card-cta { margin-top: 10px; display: inline-flex !important; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; color: var(--terra-l); }
@@ -578,7 +600,13 @@ button { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
           <path d="M9 12l2 2 4-4"/>
         </svg>
       </span>
-      <span class="ctx-card-label">Solo propietarios de PHs administrados por ForumPHs</span>
+      <span class="excl-callout">
+        <span class="excl-top">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>
+          <span class="excl-main">Solo propietarios</span>
+        </span>
+        <span class="excl-sub">de PHs administrados por:</span>
+      </span>
       <span class="ctx-card-name">ForumPHs</span>
       <span class="ctx-card-desc">Acceso exclusivo para propietarios. Consultas ilimitadas con contexto de su PH.</span>
       <span class="ctx-card-cta ctx-card-cta-prop">Acceder <span aria-hidden="true">→</span></span>
@@ -949,7 +977,7 @@ function startOnboarding(){
     bodyHtml = `<div style="font-family:var(--fn);font-size:14px;color:var(--c72);line-height:1.85;">
       Hola, <strong style="color:var(--chalk)">${esc(_dn)}</strong>, bienvenido a <strong style="color:var(--chalk)">ForumPHs Speaks</strong>.<br><br>
       Quiero que sepa que usted cuenta con un <strong style="color:#C4622D">Golden Pass</strong> para realizar todas las consultas que requiera sin l&iacute;mites, por ser propietario de <strong style="color:var(--chalk)">${esc(building)}</strong>${esc(unit)}, uno de los PHs administrados por ForumPHs.<br><br>
-      Soy su asistente especializado en la <strong style="color:var(--chalk)">Ley vigente de R&eacute;gimen de Propiedad Horizontal</strong>. Estoy aqu&iacute; para ayudarle a entender sus derechos y obligaciones como propietario, en lenguaje claro y sin tecnicismos. Soy un asistente automatizado, supervisado y gestionado con criterio jur&iacute;dico por ForumPHs: le doy informaci&oacute;n general, no asesor&iacute;a legal, y puedo equivocarme.<br><br>
+      Soy su asistente especializado en la <strong style="color:var(--chalk)">Ley vigente de R&eacute;gimen de Propiedad Horizontal</strong>. Estoy aqu&iacute; para ayudarle a entender sus derechos y obligaciones como propietario, en lenguaje claro y sin tecnicismos. No soy abogado: soy un asistente automatizado, supervisado y gestionado con criterio jur&iacute;dico por ForumPHs. Le doy informaci&oacute;n general, no asesor&iacute;a legal, y puesto que estoy soportado sobre infraestructura tecnol&oacute;gica podr&iacute;a equivocarme.<br><br>
       &iquest;Cu&aacute;l es su consulta hoy?
     </div>`;
     localStorage.setItem('fphs_owner_welcomed','1');
@@ -967,7 +995,7 @@ function startOnboarding(){
     bodyHtml = `<div style="font-family:var(--fn);font-size:14px;color:var(--c72);line-height:1.78;">
       ${greeting}<br><br>
       Soy un asistente especializado en la <strong style="color:var(--chalk)">Ley vigente de R&eacute;gimen de Propiedad Horizontal</strong> de Panam&aacute;. Estoy aqu&iacute; para ayudarle a entender sus derechos y obligaciones en lenguaje claro, sin tecnicismos.<br><br>
-      No soy abogado: soy un asistente automatizado, supervisado y gestionado con criterio jur&iacute;dico por <strong style="color:var(--chalk)">ForumPHs</strong>. Le doy informaci&oacute;n general, no asesor&iacute;a legal, y puedo equivocarme.<br><br>
+      No soy abogado: soy un asistente automatizado, supervisado y gestionado con criterio jur&iacute;dico por <strong style="color:var(--chalk)">ForumPHs</strong>. Le doy informaci&oacute;n general, no asesor&iacute;a legal, y puesto que estoy soportado sobre infraestructura tecnol&oacute;gica podr&iacute;a equivocarme.<br><br>
       ${!_dn ? '&iquest;C&oacute;mo deber&iacute;a llamarle?' : '&iquest;Cu&aacute;l es su primera consulta?'}
     </div>
     ${!_dn ? `<div class="name-input-row">
